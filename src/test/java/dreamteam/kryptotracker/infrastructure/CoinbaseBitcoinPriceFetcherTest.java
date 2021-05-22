@@ -1,5 +1,6 @@
 package dreamteam.kryptotracker.infrastructure;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,19 +11,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-class CoindeskBitcoinPriceFetcherTest {
+class CoinbaseBitcoinPriceFetcherTest {
     @Value("localhost:8089")
     private String base;
-    @Value("/v1/bpi/currentprice/PLN.json")
+    @Value("/v2/prices/spot")
     private String uri;
     @Autowired
-    private CoindeskBitcoinPriceFetcher priceFetcher;
+    private CoinbaseBitcoinPriceFetcher priceFetcher;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
 
     @Test
     public void addressIsConfiguredProperly() {
-        assertEquals(base, priceFetcher.coindeskConfiguration.getBase());
-        assertEquals(uri, priceFetcher.coindeskConfiguration.getUri());
+        assertEquals(base, priceFetcher.coinbaseConfiguration.getBase());
+        assertEquals(uri, priceFetcher.coinbaseConfiguration.getUri());
     }
-
 }

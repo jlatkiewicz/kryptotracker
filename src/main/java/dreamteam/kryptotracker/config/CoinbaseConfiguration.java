@@ -11,8 +11,8 @@ import reactor.netty.http.client.HttpClient;
 import java.time.Duration;
 
 @Configuration
-@ConfigurationProperties(prefix = "coindesk")
-public class CoindeskConfiguration {
+@ConfigurationProperties(prefix = "coinbase")
+public class CoinbaseConfiguration {
 
     private String base;
     private String uri;
