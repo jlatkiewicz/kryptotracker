@@ -1,4 +1,4 @@
-package dreamteam.kryptotracker.security;
+package dreamteam.kryptotracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

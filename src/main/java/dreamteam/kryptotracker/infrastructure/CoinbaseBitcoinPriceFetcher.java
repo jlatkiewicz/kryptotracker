@@ -1,7 +1,7 @@
 package dreamteam.kryptotracker.infrastructure;
 
 import dreamteam.kryptotracker.config.CoinbaseConfiguration;
-import dreamteam.kryptotracker.domain.BitcoinPriceFetcher;
+import dreamteam.kryptotracker.domain.price.BitcoinPriceFetcher;
 import dreamteam.kryptotracker.infrastructure.json.CoinbaseResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

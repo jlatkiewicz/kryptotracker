@@ -1,4 +1,4 @@
-package dreamteam.kryptotracker.domain;
+package dreamteam.kryptotracker.domain.price;
 
 import java.math.BigDecimal;
 
