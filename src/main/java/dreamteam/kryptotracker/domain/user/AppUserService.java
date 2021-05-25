@@ -3,22 +3,20 @@ package dreamteam.kryptotracker.domain.user;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AppUserService implements UserDetailsService {
 
-    private final static String USER_NOT_FOUND_MSG =
-            "User with username %s not found";
+    private final static String USER_NOT_FOUND_MSG = "User with username %s not found";
 
     private final AppUserRepository appUserRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public AppUserService(AppUserRepository appUserRepository,
-                          BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public AppUserService(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
         this.appUserRepository = appUserRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class AppUserService implements UserDetailsService {
             throw new IllegalStateException("Username already taken");
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+        String encodedPassword = passwordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
         appUserRepository.add(appUser);
     }
