@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import SignUp from "@/views/SignUp";
 import Login from "@/views/Login";
+import Wallet from "@/views/Wallet";
+import Logout from "@/views/LogOut";
 
 Vue.use(VueRouter);
 
@@ -23,18 +25,22 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: Login
+  },
+  {
+    path: "/logout",
+    name: "LogOut",
+    component: Logout
   },
   {
     path: "/signup",
     name: "SignUp",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: SignUp
+  },
+  {
+    path: "/wallet",
+    name: "Wallet",
+    component: Wallet
   }
 ];
 

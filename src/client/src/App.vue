@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <b-container bg-info >
+  <div id="app" class="m-0 bg-light text-dark">
+    <b-container bg-info>
       <navbar-header></navbar-header>
       <router-view />
     </b-container>

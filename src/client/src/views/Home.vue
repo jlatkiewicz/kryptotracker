@@ -6,26 +6,20 @@
           align-h="center"
           border-variant="dark"
           bg-variant="light"
-          title="Let's start journey"
-          img-src="https://picsum.photos/600/300/?image=25"
-          img-alt="Image"
-          img-top
           tag="article"
           style="max-width: 70rem;"
           class="mb-2 mx-auto"
 
       >
-        <b-card-text>
-          Some quick example text to build on the card title and make up the bulk of the card's content.
+        <b-img thumbnail fluid src="../assets/pexels-krypto-home.jpg" alt="Image 1"></b-img>
+        <b-card-text >
+          <p v-if="isUserLogin() === true">Czesc {{}}</p>
+          <p v-else>Smutno</p>
         </b-card-text>
+
 
         <b-button to="/" variant="primary">Go home again</b-button>
 
-        <div class="container">
-          <h1>My First Bootstrap Page</h1>
-          <p>This is some text.</p>
-          <p><font-awesome-icon icon="bitcoin"/></p>
-        </div>
       </b-card>
 
 <!--      <b-jumbotron header="BootstrapVue" lead="Bootstrap v4 Components for Vue.js 2">-->
@@ -38,9 +32,13 @@
 </template>
 
 <script>
-// @ is an alias to /src
 
 export default {
   name: "Home",
+  methods: {
+    isUserLogin(){
+      return this.$store.state.isUserLogin
+    }
+  }
 };
 </script>
