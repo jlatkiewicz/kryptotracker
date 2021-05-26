@@ -1,6 +1,6 @@
 package dreamteam.kryptotracker.api;
 
-import dreamteam.kryptotracker.domain.PriceService;
+import dreamteam.kryptotracker.domain.price.PriceService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;

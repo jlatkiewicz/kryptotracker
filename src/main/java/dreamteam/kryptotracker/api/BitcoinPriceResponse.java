@@ -1,6 +1,6 @@
 package dreamteam.kryptotracker.api;
 
-import dreamteam.kryptotracker.domain.BitcoinPrice;
+import dreamteam.kryptotracker.domain.price.BitcoinPrice;
 
 import java.math.BigDecimal;
 

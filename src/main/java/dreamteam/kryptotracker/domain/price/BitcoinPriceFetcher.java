@@ -1,4 +1,4 @@
-package dreamteam.kryptotracker.domain;
+package dreamteam.kryptotracker.domain.price;
 
 import reactor.core.publisher.Mono;
 
