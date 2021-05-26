@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import "./icons.js"
 import "./plugins/bootstrap-vue";
 
+//axios.defaults.baseURL = 'http://localhost:8080/';
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios)

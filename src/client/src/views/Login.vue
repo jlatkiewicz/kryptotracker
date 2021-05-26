@@ -6,12 +6,11 @@
 
         <b-col cols ="5">
           <b-card>
-            <b-form @submit="onLogin" @reset="onReset" v-if="show">
+            <b-form @submit="onLogin" @reset="onReset">
               <b-form-group
                   id="input-group-1"
                   label="Login:"
                   label-for="input-1"
-                  description="Bla bla"
               >
                 <b-form-input
                     id="input-1"
@@ -32,7 +31,7 @@
                 ></b-form-input>
               </b-form-group>
 
-              <b-button to="/wallet" variant="primary" class="mr-4">Login</b-button>
+              <b-button type="submit" variant="primary" class="mr-4">Login</b-button>
               <b-button type="reset" variant="danger">Cancel</b-button>
             </b-form>
           </b-card>
@@ -57,7 +56,6 @@ export default {
         username: '',
         password: '',
       },
-      show: true
     }
   },
   computed: {
@@ -81,8 +79,16 @@ export default {
           })
       alert("Pomyslnie!")
       this.$store.state.isUserLogin = true;
+      this.$store.state.user.name = this.form.username;
       this.form.username = ''
       this.form.password = ''
+      this.$router.push('/wallet');
+
+      //tutaj powinnismy w store zapisywac id usera,
+      // jesli response 200, sukces
+      //po ktorym bedziemy robic gety o stan portfela itd
+      //trzeba sprawdzic tez czy isAdmin
+
     },
     onReset(event) {
       event.preventDefault()

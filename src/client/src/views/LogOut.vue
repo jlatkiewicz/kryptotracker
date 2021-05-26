@@ -2,12 +2,18 @@
   <div>
 
     <b-container class="bv-example-row">
+<b-row class="justify-content-md-center mt-5">
+  <b-col cols="5">
+    <b-card bg-variant="light" header="Logging out" class="text-center">
       <b-row class="justify-content-md-center mt-5">
-        Are you sure?
+          <b-card-text>Are you sure, {{ username }}?</b-card-text>
       </b-row>
       <b-row class="justify-content-md-center mt-5">
-        <b-button v-on:click="onClick" to="/" variant="primary" class="mr-4">LogOut</b-button>
+        <b-button v-on:click="onClick" to="/" variant="primary" >LogOut</b-button>
       </b-row>
+    </b-card>
+  </b-col>
+</b-row>
     </b-container>
 
   </div>
@@ -22,7 +28,8 @@ export default {
         username: '',
         password: '',
       },
-      show: true
+      username: this.$store.state.user.name,
+
     }
   },
   computed: {

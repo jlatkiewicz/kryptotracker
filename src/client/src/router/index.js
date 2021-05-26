@@ -5,6 +5,7 @@ import SignUp from "@/views/SignUp";
 import Login from "@/views/Login";
 import Wallet from "@/views/Wallet";
 import Logout from "@/views/LogOut";
+import store from "@/store/index"
 
 Vue.use(VueRouter);
 
@@ -12,35 +13,42 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: Home
+    component: Home,
+    meta: {
+      requireAuth: false
+    }
   },
   {
     path: "/login",
     name: "Login",
-    component: Login
+    component: Login,
+    meta: {
+      requireAuth: false
+    }
   },
   {
     path: "/logout",
     name: "LogOut",
-    component: Logout
+    component: Logout,
+    meta: {
+      requireAuth: false
+    }
   },
   {
     path: "/signup",
     name: "SignUp",
-    component: SignUp
+    component: SignUp,
+    meta: {
+      requireAuth: false
+    }
   },
   {
     path: "/wallet",
     name: "Wallet",
-    component: Wallet
+    component: Wallet,
+    meta: {
+      requireAuth: true
+    }
   }
 ];
 
@@ -50,4 +58,10 @@ const router = new VueRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (store.state.isUserLogin === true) next()
+    else next('/login')
+  } else next()
+})
 export default router;

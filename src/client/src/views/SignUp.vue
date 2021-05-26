@@ -66,22 +66,24 @@ export default {
     }
   },
   methods: {
-    onRegister(event) {
+    async onRegister(event) {
       event.preventDefault()
-      axios.post("https://jsonplaceholder.typicode.com/posts", this.form)
-      .then(response => console.log(response))
-          .catch(err => {
-            if (err.response) {
-              alert(err.response)
-            } else if (err.request) {
-              alert(err.response)
-            } else {
-              alert("sth goes wrong")
-            }
-          })
-      alert("Pomyslnie!")
+      const response = await axios.post("https://jsonplaceholder.typicode.com/posts", this.form);
+      // axios.post("https://jsonplaceholder.typicode.com/posts", this.form)
+      // .then(response => console.log(response))
+      //     .catch(err => {
+      //       if (err.response) {
+      //         alert(err.response)
+      //       } else if (err.request) {
+      //         alert(err.response)
+      //       } else {
+      //         alert("sth goes wrong")
+      //       }
+      //     })
       this.form.username = ''
       this.form.password = ''
+      alert("Pomyslnie!")
+      await this.$router.push('/login');
     },
 
     onReset(event) {
