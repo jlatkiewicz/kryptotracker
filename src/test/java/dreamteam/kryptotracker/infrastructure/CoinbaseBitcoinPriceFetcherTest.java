@@ -1,6 +1,7 @@
 package dreamteam.kryptotracker.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dreamteam.kryptotracker.infrastructure.price.CoinbaseBitcoinPriceFetcher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package dreamteam.kryptotracker.config;
 
-import dreamteam.kryptotracker.domain.user.AppUserService;
+import dreamteam.kryptotracker.domain.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,11 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AppUserService appUserService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    public WebSecurityConfig(AppUserService appUserService, PasswordEncoder passwordEncoder) {
-        this.appUserService = appUserService;
+    public WebSecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         DaoAuthenticationProvider provider =
                 new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(appUserService);
+        provider.setUserDetailsService(userService);
         return provider;
     }
 }

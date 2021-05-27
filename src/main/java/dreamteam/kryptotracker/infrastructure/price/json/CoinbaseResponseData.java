@@ -1,4 +1,4 @@
-package dreamteam.kryptotracker.infrastructure.json;
+package dreamteam.kryptotracker.infrastructure.price.json;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

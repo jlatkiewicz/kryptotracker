@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 public class InMemoryUserRepository implements AppUserRepository {
@@ -13,13 +14,14 @@ public class InMemoryUserRepository implements AppUserRepository {
     private final Map<String, AppUser> content = new HashMap<>();
 
     @Override
-    public Optional<AppUser> findByUsername(String username) {
-        return Optional.ofNullable(content.get(username));
+    public Mono<AppUser> findByUsername(String username) {
+        Optional<AppUser> maybeUser = Optional.ofNullable(content.get(username));
+        return Mono.justOrEmpty(maybeUser);
     }
 
     @Override
-    public void add(AppUser user) {
-        content.put(user.getUsername(), user);
+    public Mono<AppUser> add(AppUser user) {
+        return Mono.justOrEmpty(content.put(user.getUsername(), user));
     }
 
 }

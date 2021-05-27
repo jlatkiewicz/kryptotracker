@@ -1,4 +1,4 @@
-package dreamteam.kryptotracker.api;
+package dreamteam.kryptotracker.api.price;
 
 import dreamteam.kryptotracker.domain.price.BitcoinPrice;
 

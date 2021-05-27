@@ -2,11 +2,12 @@ package dreamteam.kryptotracker.domain.user;
 
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 @Repository
 public interface AppUserRepository {
 
-    Optional<AppUser> findByUsername(String username);
+    Mono<AppUser> findByUsername(String username);
 
-    void add(AppUser user);
+    Mono<AppUser> add(AppUser user);
 }

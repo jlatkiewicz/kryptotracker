@@ -2,18 +2,17 @@ package dreamteam.kryptotracker.domain.user;
 
 import java.util.Collection;
 import java.util.Collections;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class AppUser implements UserDetails {
-
-    private String firstName;
-    private String username;
-    private String password;
-    private AppUserRole appUserRole;
-    private Boolean locked = false;
-    private Boolean enabled = true;
+    private final String username;
+    private final String password;
+    private final AppUserRole appUserRole;
+    private final Boolean locked;
+    private final Boolean enabled;
 
     public AppUser(String username,
                    String password,
@@ -21,6 +20,20 @@ public class AppUser implements UserDetails {
         this.username = username;
         this.password = password;
         this.appUserRole = appUserRole;
+        this.locked = false;
+        this.enabled = true;
+    }
+
+    private AppUser(String username,
+                    String password,
+                    AppUserRole appUserRole,
+                    boolean locked,
+                    boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.appUserRole = appUserRole;
+        this.locked = locked;
+        this.enabled = enabled;
     }
 
     @Override
@@ -37,10 +50,6 @@ public class AppUser implements UserDetails {
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public String getFirstName() {
-        return firstName;
     }
 
     @Override
@@ -66,17 +75,4 @@ public class AppUser implements UserDetails {
     public AppUserRole getAppUserRole() {
         return appUserRole;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
 }
