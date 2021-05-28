@@ -21,7 +21,8 @@ public class InMemoryUserRepository implements AppUserRepository {
 
     @Override
     public Mono<AppUser> add(AppUser user) {
-        return Mono.justOrEmpty(content.put(user.getUsername(), user));
+        content.put(user.getUsername(), user);
+        return Mono.justOrEmpty(Optional.ofNullable(content.get(user.getUsername())));
     }
 
 }

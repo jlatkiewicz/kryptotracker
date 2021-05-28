@@ -1,7 +1,7 @@
 package dreamteam.kryptotracker.domain.user;
 
 import dreamteam.kryptotracker.domain.wallet.WalletRepository;
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,12 +38,19 @@ public class UserService implements UserDetailsService {
         return appUserRepository.findByUsername(username)
                 .map(appuser -> new RegistrationResult(false))
                 .switchIfEmpty(addUser(appUser));
-
     }
 
     private Mono<RegistrationResult> addUser(AppUser appUser) {
         return appUserRepository.add(appUser)
                 .zipWith(walletRepository.createFor(appUser.getUsername()), (u, w) -> new RegistrationResult(true));
+    }
+
+    public Mono<LoginResult> loginUser(String username, String password) {
+        return appUserRepository.findByUsername(username)
+                .map(user -> passwordEncoder.matches(password, user.getPassword())
+                        ? new LoginResult(true)
+                        : new LoginResult(false))
+                .switchIfEmpty(Mono.just(new LoginResult(false)));
     }
 
 }
