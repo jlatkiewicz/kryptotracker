@@ -1,10 +1,8 @@
 <template>
   <div>
-
     <b-container class="bv-example-row">
       <b-row class="justify-content-md-center mt-5">
-
-        <b-col cols ="5">
+        <b-col cols="5">
           <b-card>
             <b-form @submit="onLogin" @reset="onReset">
               <b-form-group
@@ -21,7 +19,11 @@
                 ></b-form-input>
               </b-form-group>
 
-              <b-form-group id="input-group-2" label="Password:" label-for="input-2">
+              <b-form-group
+                  id="input-group-2"
+                  label="Password:"
+                  label-for="input-2"
+              >
                 <b-form-input
                     id="input-2"
                     v-model="form.password"
@@ -31,7 +33,10 @@
                 ></b-form-input>
               </b-form-group>
 
-              <b-button type="submit" variant="primary" class="mr-4">Login</b-button>
+              <b-button type="submit" variant="primary" class="mr-4"
+              >Login
+              </b-button
+              >
               <b-button type="reset" variant="danger">Cancel</b-button>
             </b-form>
           </b-card>
@@ -39,10 +44,8 @@
             <pre class="m-0">{{ form }}</pre>
           </b-card>
         </b-col>
-
       </b-row>
     </b-container>
-
   </div>
 </template>
 
@@ -53,54 +56,74 @@ export default {
   data() {
     return {
       form: {
-        username: '',
-        password: '',
+        username: "",
+        password: "",
       },
-    }
+    };
   },
   computed: {
-    getUser(){
+    getUser() {
       return this.$store.state.user;
-    }
+    },
   },
   methods: {
-    onLogin(event) {
-      event.preventDefault()
-      axios.post("https://jsonplaceholder.typicode.com/posts", this.form)
-          .then(response => console.log(response))
-          .catch(err => {
-            if (err.response) {
-              alert(err.response)
-            } else if (err.request) {
-              alert(err.response)
-            } else {
-              alert("sth goes wrong")
-            }
+    reset() {
+      this.form.username = "";
+      this.form.password = "";
+    },
+    async calculate() {
+      const v = this;
+      await axios
+          .get("http://localhost:8080/price")
+          .then(function (response) {
+            v.$store.state.wallet.currency = response.data.bitcoinPriceInPln * v.$store.state.wallet.crypto;
+            console.log(v.$store.state.wallet.currency);
+            console.log(response);
+          }).catch(function (err) {
+            console.log(err.response);
+            alert("Something goes wrong.");
           })
-      alert("Pomyslnie!")
-      this.$store.state.isUserLogin = true;
-      this.$store.state.user.name = this.form.username;
-      this.form.username = ''
-      this.form.password = ''
-      this.$router.push('/wallet');
+    },
+    setWallet() {
+      const v = this;
+      axios.get("http://localhost:8080/wallet/" + this.$store.state.user.name)
+          .then(async function (response) {
+            v.$store.state.wallet.crypto = response.data.bitcoinAmount;
+            v.calculate();
+            console.log(v.$store.state.wallet.crypto);
+            console.log(response);
+          }).catch(function (err) {
+            console.log(err.response);
+      });
 
-      //tutaj powinnismy w store zapisywac id usera,
-      // jesli response 200, sukces
-      //po ktorym bedziemy robic gety o stan portfela itd
-      //trzeba sprawdzic tez czy isAdmin
+    },
+    onLogin(event) {
+      const v = this;
+      event.preventDefault();
+      axios
+          .post("http://localhost:8080/users/login", this.form)
+          .then(function (response) {
+            console.log(response);
+            v.$store.state.isUserLogin = true;
+            v.$store.state.user.name = v.form.username;
+            v.reset();
+            alert("Login successfully");
+            v.setWallet();
+            v.calculate();
+            v.$router.push("/wallet");
+          }).catch(function (err) {
+            console.log(err);
+            alert("Something goes wrong.");
+            v.reset();
+      });
 
     },
     onReset(event) {
-      event.preventDefault()
-      this.form.username = ''
-      this.form.password = ''
-    }
-  }
-}
+      event.preventDefault();
+      this.reset();
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
-
-
+<style scoped></style>

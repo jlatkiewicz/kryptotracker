@@ -2,7 +2,6 @@
   <div>
     <b-container class="bv-example-row">
       <b-row class="justify-content-md-center mt-5">
-
         <b-col cols="5">
           <b-card>
             <b-form @submit="onRegister" @reset="onReset" v-if="show">
@@ -20,7 +19,11 @@
                 ></b-form-input>
               </b-form-group>
 
-              <b-form-group id="input-group-2" label="Password:" label-for="input-2">
+              <b-form-group
+                  id="input-group-2"
+                  label="Password:"
+                  label-for="input-2"
+              >
                 <b-form-input
                     id="input-2"
                     v-model="form.password"
@@ -30,24 +33,22 @@
                 ></b-form-input>
               </b-form-group>
 
-              <b-button type="submit" variant="primary" class="mr-2">Register</b-button>
+              <b-button type="submit" variant="primary" class="mr-2"
+              >Register
+              </b-button
+              >
               <b-button type="reset" variant="danger">Reset</b-button>
             </b-form>
           </b-card>
         </b-col>
-
-
       </b-row>
-      <b-row class = "justify-content-md-center mt-5">
+      <b-row class="justify-content-md-center mt-5">
         <b-col cols="5">
           <b-card class="mt-3" header="Form Data Result">
             <pre class="m-0">{{ form }}</pre>
           </b-card>
         </b-col>
-
       </b-row>
-
-
     </b-container>
   </div>
 </template>
@@ -55,46 +56,49 @@
 <script>
 import axios from "axios";
 
+
 export default {
   data() {
     return {
       form: {
-        username: '',
-        password: '',
+        username: "",
+        password: "",
       },
-      show: true
-    }
+      show: true,
+    };
   },
   methods: {
-    async onRegister(event) {
-      event.preventDefault()
-      const response = await axios.post("https://jsonplaceholder.typicode.com/posts", this.form);
-      // axios.post("https://jsonplaceholder.typicode.com/posts", this.form)
-      // .then(response => console.log(response))
-      //     .catch(err => {
-      //       if (err.response) {
-      //         alert(err.response)
-      //       } else if (err.request) {
-      //         alert(err.response)
-      //       } else {
-      //         alert("sth goes wrong")
-      //       }
-      //     })
-      this.form.username = ''
-      this.form.password = ''
-      alert("Pomyslnie!")
-      await this.$router.push('/login');
+    reset() {
+      this.form.username = "";
+      this.form.password = "";
     },
-
+    onRegister(event) {
+      const v = this;
+      event.preventDefault();
+      axios
+          .post("http://localhost:8080/users/register", this.form)
+          .then(function (response) {
+            console.log(response);
+            v.reset();
+            alert("Register successfully");
+            v.$router.push("/login");
+          }).catch(function (err) {
+        if (err.response.status === 401) {
+          alert("Wrong password or login");
+        } else {
+          console.log(err)
+          alert("Something goes wrong.");
+          v.reset();
+        }
+      })
+    },
     onReset(event) {
-      event.preventDefault()
-      this.form.username = ''
-      this.form.password = ''
+      event.preventDefault();
+      this.reset();
     }
-  }
-}
+    ,
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

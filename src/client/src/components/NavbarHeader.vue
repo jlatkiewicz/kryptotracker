@@ -7,9 +7,12 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" class="mr-auto" is-nav>
-          <b-navbar-nav class="ml-auto" v-if="this.$store.state.isUserLogin === false">
-              <b-nav-item to="/login">Login</b-nav-item>
-              <b-nav-item to="/signup">SignUp</b-nav-item>
+          <b-navbar-nav
+            class="ml-auto"
+            v-if="this.$store.state.isUserLogin === false"
+          >
+            <b-nav-item to="/login">Login</b-nav-item>
+            <b-nav-item to="/signup">SignUp</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" v-else>
             <b-nav-item to="/wallet">Wallet</b-nav-item>
@@ -23,10 +26,8 @@
 
 <script>
 export default {
-  name: "NavbarHeader"
-}
+  name: "NavbarHeader",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

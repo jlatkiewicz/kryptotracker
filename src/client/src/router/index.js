@@ -5,7 +5,7 @@ import SignUp from "@/views/SignUp";
 import Login from "@/views/Login";
 import Wallet from "@/views/Wallet";
 import Logout from "@/views/LogOut";
-import store from "@/store/index"
+import store from "@/store/index";
 
 Vue.use(VueRouter);
 
@@ -15,41 +15,41 @@ const routes = [
     name: "Home",
     component: Home,
     meta: {
-      requireAuth: false
-    }
+      requireAuth: false,
+    },
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
     meta: {
-      requireAuth: false
-    }
+      requireAuth: false,
+    },
   },
   {
     path: "/logout",
     name: "LogOut",
     component: Logout,
     meta: {
-      requireAuth: false
-    }
+      requireAuth: false,
+    },
   },
   {
     path: "/signup",
     name: "SignUp",
     component: SignUp,
     meta: {
-      requireAuth: false
-    }
+      requireAuth: false,
+    },
   },
   {
     path: "/wallet",
     name: "Wallet",
     component: Wallet,
     meta: {
-      requireAuth: true
-    }
-  }
+      requireAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
@@ -59,9 +59,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requireAuth)) {
-    if (store.state.isUserLogin === true) next()
-    else next('/login')
-  } else next()
-})
+  if (to.matched.some((record) => record.meta.requireAuth)) {
+    if (store.state.isUserLogin === true) next();
+    else next("/login");
+  } else next();
+});
 export default router;

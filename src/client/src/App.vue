@@ -1,15 +1,15 @@
 <template>
   <div id="app" class="m-0 bg-light text-dark">
-      <navbar-header></navbar-header>
-      <router-view />
+    <navbar-header></navbar-header>
+    <router-view />
   </div>
 </template>
 
 <script>
- import NavbarHeader from "@/components/NavbarHeader";
- export default{
-   components: {"navbar-header": NavbarHeader},
- }
+import NavbarHeader from "@/components/NavbarHeader";
+export default {
+  components: { "navbar-header": NavbarHeader },
+};
 </script>
 
 <style>
@@ -34,8 +34,3 @@
   color: #42b983;
 }
 </style>
-
-
-
-
-
