@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import javax.security.auth.login.LoginException;
+
 @RestController
 public class UserController {
 
@@ -33,9 +35,9 @@ public class UserController {
     @PostMapping("/users/login")
     public Mono<String> login(@RequestBody LoginRequest request) {
         return userService.loginUser(request.getUsername(), request.getPassword())
-                .map(result -> {
-                    if (result.isSuccessful()) return request.getUsername() + " login successfully";
-                    else return "Wrong login or password";
+                .flatMap(result -> {
+                    if (result.isSuccessful()) return Mono.just(request.getUsername() + " login successfully");
+                    else return Mono.error(new LoginException("Wrong login or password"));
                 });
     }
 
