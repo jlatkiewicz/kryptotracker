@@ -74,7 +74,7 @@ export default {
     async calculate() {
       const v = this;
       await axios
-          .get("http://localhost:8080/price")
+          .get("/price")
           .then(function (response) {
             v.$store.state.wallet.currency = response.data.bitcoinPriceInPln * v.$store.state.wallet.crypto;
             console.log(v.$store.state.wallet.currency);
@@ -86,14 +86,14 @@ export default {
     },
     setWallet() {
       const v = this;
-      axios.get("http://localhost:8080/wallet/" + this.$store.state.user.name)
+      axios.get("/wallet/" + this.$store.state.user.name)
           .then(async function (response) {
             v.$store.state.wallet.crypto = response.data.bitcoinAmount;
             v.calculate();
             console.log(v.$store.state.wallet.crypto);
             console.log(response);
           }).catch(function (err) {
-            console.log(err.response);
+        console.log(err.response);
       });
 
     },
@@ -101,7 +101,7 @@ export default {
       const v = this;
       event.preventDefault();
       axios
-          .post("http://localhost:8080/users/login", this.form)
+          .post("/users/login", this.form)
           .then(function (response) {
             console.log(response);
             v.$store.state.isUserLogin = true;
@@ -112,9 +112,9 @@ export default {
             v.calculate();
             v.$router.push("/wallet");
           }).catch(function (err) {
-            console.log(err);
-            alert("Something goes wrong.");
-            v.reset();
+        console.log(err);
+        alert("Something goes wrong.");
+        v.reset();
       });
 
     },

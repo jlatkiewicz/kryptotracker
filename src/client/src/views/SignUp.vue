@@ -76,7 +76,7 @@ export default {
       const v = this;
       event.preventDefault();
       axios
-          .post("http://localhost:8080/users/register", this.form)
+          .post("/users/register", this.form)
           .then(function (response) {
             console.log(response);
             v.reset();

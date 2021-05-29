@@ -76,7 +76,7 @@ export default {
       event.preventDefault();
      const v = this;
       await axios
-          .get("http://localhost:8080/price" )
+          .get("/price" )
           .then(async function (response) {
             v.wallet.money = response.data.bitcoinPriceInPln * v.wallet.crypto;
             console.log(v.wallet.money);
@@ -90,7 +90,7 @@ export default {
       event.preventDefault();
       const v = this;
       await axios
-          .post("http://localhost:8080/wallet/set/" + this.username + "/" + this.wallet.crypto )
+          .post("/wallet/set/" + this.username + "/" + this.wallet.crypto )
           .then(function (response) {
             v.wallet.crypto = response.data.bitcoinAmount;
             console.log(v.wallet.crypto);
