@@ -2,43 +2,28 @@ package dreamteam.kryptotracker.domain.user;
 
 import java.util.Collection;
 import java.util.Collections;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class AppUser implements UserDetails {
+public class User implements UserDetails {
     private final String username;
     private final String password;
-    private final AppUserRole appUserRole;
-    private final Boolean locked;
-    private final Boolean enabled;
+    private final UserRole userRole;
+    private UserState userState;
 
-    public AppUser(String username,
-                   String password,
-                   AppUserRole appUserRole) {
+    public User(String username,
+                String password,
+                UserRole userRole) {
         this.username = username;
         this.password = password;
-        this.appUserRole = appUserRole;
-        this.locked = false;
-        this.enabled = true;
-    }
-
-    private AppUser(String username,
-                    String password,
-                    AppUserRole appUserRole,
-                    boolean locked,
-                    boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.appUserRole = appUserRole;
-        this.locked = locked;
-        this.enabled = enabled;
+        this.userRole = userRole;
+        this.userState = UserState.ACTIVE;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
 
@@ -59,7 +44,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !locked;
+        return userState != UserState.ACTIVE;
     }
 
     @Override
@@ -69,10 +54,18 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return userState == UserState.ACTIVE;
     }
 
-    public AppUserRole getAppUserRole() {
-        return appUserRole;
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public UserState getUserState() {
+        return userState;
+    }
+
+    public void setUserState(UserState userState) {
+        this.userState = userState;
     }
 }
