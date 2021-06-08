@@ -44,44 +44,44 @@ public class UserService implements UserDetailsService {
         return userRepository.getAllUsernames();
     }
 
-    public Mono<Result> signUpUser(String username, String password) {
+    public Mono<RegistrationResult> signUpUser(String username, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         User user = new User(username, encodedPassword, UserRole.USER);
 
         return userRepository.findByUsername(username)
-                .map(appuser -> new Result(false, String.format(USER_ALREADY_EXISTS, username)))
+                .map(appuser -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS, username)))
                 .switchIfEmpty(addUser(user));
     }
 
-    private Mono<Result> addUser(User user) {
+    private Mono<RegistrationResult> addUser(User user) {
         return userRepository.add(user)
-                .zipWith(walletRepository.createFor(user.getUsername()), (u, w) -> new Result(true, USER_ADDED));
+                .zipWith(walletRepository.createFor(user.getUsername()), (u, w) -> new RegistrationResult(true, USER_ADDED));
     }
 
-    public Mono<Result> loginUser(String username, String password) {
+    public Mono<LoginResult> loginUser(String username, String password) {
         return userRepository.findByUsername(username)
                 .map(user -> passwordEncoder.matches(password, user.getPassword())
-                        ? new Result(true, String.format(LOGIN_SUCCESSFULLY, username))
-                        : new Result(false, WRONG_LOGIN_OR_PASSWORD))
-                .switchIfEmpty(Mono.just(new Result(false, String.format(USER_NOT_EXISTS, username))));
+                        ? new LoginResult(true, String.format(LOGIN_SUCCESSFULLY, username))
+                        : new LoginResult(false, WRONG_LOGIN_OR_PASSWORD))
+                .switchIfEmpty(Mono.just(new LoginResult(false, String.format(USER_NOT_EXISTS, username))));
     }
 
-    public Mono<Result> updateState(String username, UserState userState) {
+    public Mono<UpdateResult> updateState(String username, UserState userState) {
         return userRepository.findByUsername(username)
                 .flatMap(appuser -> updateState(appuser, userState))
-                .switchIfEmpty(Mono.just(new Result(false, USER_ADDED)));
+                .switchIfEmpty(Mono.just(new UpdateResult(false, USER_ADDED)));
     }
 
-    private Mono<Result> updateState(User user, UserState userState) {
-        if (user.getUserState() == null) {
-            return Mono.just(new Result(false, WRONG_STATUS));
+    private Mono<UpdateResult> updateState(User user, UserState userState) {
+        if (userState == null) {
+            return Mono.just(new UpdateResult(false, WRONG_STATUS));
         }
         if (UserState.TERMINATED == user.getUserState()) {
-            return Mono.just(new Result(false, CANNOT_CHANGE_STATUS_FROM_TERMINATED));
+            return Mono.just(new UpdateResult(false, CANNOT_CHANGE_STATUS_FROM_TERMINATED));
         }
         return userRepository.setUserState(user, userState)
-                .map(usr -> new Result(true, STATUS_CHANGED))
-                .switchIfEmpty(Mono.just(new Result(false, String.format(USER_NOT_EXISTS, user.getUsername()))));
+                .map(usr -> new UpdateResult(true, STATUS_CHANGED))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS, user.getUsername()))));
     }
 
 }

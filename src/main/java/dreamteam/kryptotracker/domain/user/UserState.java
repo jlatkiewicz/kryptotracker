@@ -6,15 +6,11 @@ public enum UserState {
     TERMINATED;
 
     public static UserState from(String state) {
-        if(state.equalsIgnoreCase("ACTIVE")){
-            return ACTIVE;
-        }
-        if(state.equalsIgnoreCase("LOCKED")){
-            return LOCKED;
-        }
-        if(state.equalsIgnoreCase("TERMINATED")){
-            return TERMINATED;
-        }
-        return null;
+        return switch (state) {
+            case "ACTIVE", "active" -> ACTIVE;
+            case "LOCKED", "locked" -> LOCKED;
+            case "TERMINATED", "terminated" -> TERMINATED;
+            default -> null;
+        };
     }
 }

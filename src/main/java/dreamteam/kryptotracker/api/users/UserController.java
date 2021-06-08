@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,13 +51,13 @@ public class UserController {
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException(username)));
     }
 
-    @GetMapping("/users/all")
+    @GetMapping("/users")
     public Mono<Set<String>> getAllUsernames() {
         return userService.getAllUsernames();
     }
 
-    @PostMapping("/users/update")
-    public Mono<String> update(@RequestParam("username") String username, @RequestParam("state") String state) {
+    @PutMapping("/users/{username}")
+    public Mono<String> update(@PathVariable("username") String username, @RequestParam("state") String state) {
         return userService.updateState(username, UserState.from(state))
                 .flatMap(result -> {
                     if (result.isSuccessful()) return Mono.just(result.getDescription());
