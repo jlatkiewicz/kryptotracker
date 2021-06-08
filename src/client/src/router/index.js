@@ -5,7 +5,7 @@ import SignUp from "@/views/SignUp";
 import Login from "@/views/Login";
 import Wallet from "@/views/Wallet";
 import Logout from "@/views/LogOut";
-import store from "@/store/index";
+//import store from "@/store/index";
 
 Vue.use(VueRouter);
 
@@ -58,10 +58,10 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requireAuth)) {
-    if (store.state.isUserLogin === true) next();
-    else next("/login");
-  } else next();
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.requireAuth)) {
+//     if (store.state.isUserLogin === true) next();
+//     //else next("/login");
+//   } else next();
+// });
 export default router;

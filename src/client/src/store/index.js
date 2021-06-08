@@ -12,11 +12,48 @@ export default new Vuex.Store({
       isAdmin: false,
     },
     wallet: {
-      currency: 0,
-      crypto: 0,
+      money: 0,
+      bitcoin: 0,
+    },
+  },
+  getters: {
+    getUsername: (state) => {
+      return state.user.name;
+    },
+    isUserLogin: (state) => {
+      return state.isUserLogin;
+    },
+    getMoney: (state) => {
+      return state.wallet.money;
+    },
+    getBitcoin: (state) => {
+      return state.wallet.bitcoin;
+    },
+  },
+  mutations: {
+    setBitcoins(state, value) {
+      state.wallet.bitcoin = value;
+    },
+    setMoney(state, value) {
+      state.wallet.money = value;
+    },
+    setUsername(state, name) {
+      state.user.name = name;
+    },
+    userLogin(state){
+      state.isUserLogin = true;
+    },
+    userLogout(state){
+      state.isUserLogin = false;
     }
   },
-  mutations: {},
-  actions: {},
+  actions: {
+    changeBitcoins(context, value){
+      context.commit('setBitcoins', value);
+    },
+    changeMoney(context, value){
+      context.commit('setMoney', value);
+    }
+  },
   modules: {},
 });

@@ -6,37 +6,36 @@
           <b-card>
             <b-form @submit="onLogin" @reset="onReset">
               <b-form-group
-                  id="input-group-1"
-                  label="Login:"
-                  label-for="input-1"
+                id="input-group-1"
+                label="Login:"
+                label-for="input-1"
               >
                 <b-form-input
-                    id="input-1"
-                    v-model="form.username"
-                    type="text"
-                    placeholder="Enter username"
-                    required
+                  id="input-1"
+                  v-model="form.username"
+                  type="text"
+                  placeholder="Enter username"
+                  required
                 ></b-form-input>
               </b-form-group>
 
               <b-form-group
-                  id="input-group-2"
-                  label="Password:"
-                  label-for="input-2"
+                id="input-group-2"
+                label="Password:"
+                label-for="input-2"
               >
                 <b-form-input
-                    id="input-2"
-                    v-model="form.password"
-                    type="password"
-                    placeholder="Enter password"
-                    required
+                  id="input-2"
+                  v-model="form.password"
+                  type="password"
+                  placeholder="Enter password"
+                  required
                 ></b-form-input>
               </b-form-group>
 
               <b-button type="submit" variant="primary" class="mr-4"
-              >Login
-              </b-button
-              >
+                >Login
+              </b-button>
               <b-button type="reset" variant="danger">Cancel</b-button>
             </b-form>
           </b-card>
@@ -72,51 +71,62 @@ export default {
       this.form.password = "";
     },
     async calculate() {
-      const v = this;
+      const vm = this;
       await axios
-          .get("/price")
-          .then(function (response) {
-            v.$store.state.wallet.currency = response.data.bitcoinPriceInPln * v.$store.state.wallet.crypto;
-            console.log(v.$store.state.wallet.currency);
-            console.log(response);
-          }).catch(function (err) {
-            console.log(err.response);
-            alert("Something goes wrong.");
-          })
+        .get("/price")
+        .then(function (response) {
+          vm.$store.commit(
+            "setBalance",
+            response.data.bitcoinPriceInPln * vm.$store.state.wallet.bitcoin
+          );
+          console.log(vm.$store.state.wallet.money);
+          console.log(response);
+        })
+        .catch(function (err) {
+          console.log(err.response);
+          alert("Something goes wrong.");
+        });
     },
     setWallet() {
-      const v = this;
-      axios.get("/wallet/" + this.$store.state.user.name)
-          .then(async function (response) {
-            v.$store.state.wallet.crypto = response.data.bitcoinAmount;
-            v.calculate();
-            console.log(v.$store.state.wallet.crypto);
-            console.log(response);
-          }).catch(function (err) {
-        console.log(err.response);
-      });
-
+      const vm = this;
+      console.log("chce zmieniac portfel");
+      const username = vm.$store.state.user.name;
+      console.log(username)
+      axios
+        .get("/wallet/" + username)
+        .then(async function (response) {
+          vm.$store.commit("setBalance", response.data.bitcoinAmount);
+          await vm.calculate();
+          console.log(vm.$store.state.wallet.bitcoin);
+          console.log(response);
+        })
+        .catch(function (err) {
+          console.log(err.response);
+        });
     },
     onLogin(event) {
-      const v = this;
+      const vm = this;
       event.preventDefault();
       axios
-          .post("/users/login", this.form)
-          .then(function (response) {
-            console.log(response);
-            v.$store.state.isUserLogin = true;
-            v.$store.state.user.name = v.form.username;
-            v.reset();
-            alert("Login successfully");
-            v.setWallet();
-            v.calculate();
-            v.$router.push("/wallet");
-          }).catch(function (err) {
-        console.log(err);
-        alert("Something goes wrong.");
-        v.reset();
-      });
-
+        .post("/users/login", this.form)
+        .then(function (response) {
+          console.log(response);
+        //  vm.$store.state.isUserLogin = true; //do poprawy - commit
+          console.log(vm.$store.state.isUserLogin);
+          vm.$store.commit('userLogin');
+          console.log(vm.$store.state.isUserLogin);
+          vm.$store.commit('setUsername', vm.form.username)
+          vm.reset();
+          alert("Login successfully");
+          vm.setWallet();
+          vm.calculate();
+          vm.$router.push("/wallet");
+        })
+        .catch(function (err) {
+          console.log(err);
+          alert("Something goes wrong.");
+          vm.reset();
+        });
     },
     onReset(event) {
       event.preventDefault();

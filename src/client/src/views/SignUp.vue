@@ -6,37 +6,36 @@
           <b-card>
             <b-form @submit="onRegister" @reset="onReset" v-if="show">
               <b-form-group
-                  id="input-group-1"
-                  label="Username:"
-                  label-for="input-1"
+                id="input-group-1"
+                label="Username:"
+                label-for="input-1"
               >
                 <b-form-input
-                    id="input-1"
-                    v-model="form.username"
-                    type="text"
-                    placeholder="Enter username here"
-                    required
+                  id="input-1"
+                  v-model="form.username"
+                  type="text"
+                  placeholder="Enter username here"
+                  required
                 ></b-form-input>
               </b-form-group>
 
               <b-form-group
-                  id="input-group-2"
-                  label="Password:"
-                  label-for="input-2"
+                id="input-group-2"
+                label="Password:"
+                label-for="input-2"
               >
                 <b-form-input
-                    id="input-2"
-                    v-model="form.password"
-                    type="password"
-                    placeholder="Enter password"
-                    required
+                  id="input-2"
+                  v-model="form.password"
+                  type="password"
+                  placeholder="Enter password"
+                  required
                 ></b-form-input>
               </b-form-group>
 
               <b-button type="submit" variant="primary" class="mr-2"
-              >Register
-              </b-button
-              >
+                >Register
+              </b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
             </b-form>
           </b-card>
@@ -56,7 +55,6 @@
 <script>
 import axios from "axios";
 
-
 export default {
   data() {
     return {
@@ -73,30 +71,26 @@ export default {
       this.form.password = "";
     },
     onRegister(event) {
-      const v = this;
+      const vm = this;
       event.preventDefault();
       axios
-          .post("/users/register", this.form)
-          .then(function (response) {
-            console.log(response);
-            v.reset();
-            alert("Register successfully");
-            v.$router.push("/login");
-          }).catch(function (err) {
-        if (err.response.status === 401) {
-          alert("Wrong password or login");
-        } else {
-          console.log(err)
-          alert("Something goes wrong.");
-          v.reset();
-        }
-      })
+        .post("http://localhost:8080/users/register/", this.form)
+        .then(function (response) {
+          console.log(response);
+          vm.reset();
+          alert("Register successfully");
+          vm.$router.push("/login");
+        })
+        .catch(function (err) {
+            console.log(err);
+            alert("Something goes wrong.");
+            vm.reset();
+        });
     },
     onReset(event) {
       event.preventDefault();
       this.reset();
-    }
-    ,
+    },
   },
 };
 </script>
