@@ -1,13 +1,23 @@
 package dreamteam.kryptotracker.domain.user;
 
-public interface ResultDescription {
+public enum ResultDescription {
 
-    String CANNOT_CHANGE_STATUS_FROM_TERMINATED = "Cannot change status from TERMINATED";
-    String LOGIN_SUCCESSFULLY = "User '%s' login successfully";
-    String STATUS_CHANGED = "Status changed";
-    String USER_ADDED = "User added";
-    String USER_ALREADY_EXISTS = "User '%s' already exists";
-    String USER_NOT_EXISTS = "User '%s' doesn't exists";
-    String WRONG_LOGIN_OR_PASSWORD = "Wrong login or password";
-    String WRONG_STATUS = "Wrong status";
+    CANNOT_CHANGE_STATUS_FROM_TERMINATED("Cannot change status from TERMINATED"),
+    LOGIN_SUCCESSFULLY("User '%s' login successfully"),
+    STATUS_CHANGED("Status changed"),
+    USER_ADDED("User added"),
+    USER_ALREADY_EXISTS("User '%s' already exists"),
+    USER_NOT_EXISTS("User '%s' doesn't exists"),
+    WRONG_LOGIN_OR_PASSWORD("Wrong login or password"),
+    WRONG_STATUS("Wrong status");
+
+    private String description;
+
+    ResultDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

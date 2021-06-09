@@ -11,9 +11,9 @@ import reactor.core.publisher.Mono;
 
 import static dreamteam.kryptotracker.domain.user.ResultDescription.CANNOT_CHANGE_STATUS_FROM_TERMINATED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.LOGIN_SUCCESSFULLY;
-import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ALREADY_EXISTS;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.STATUS_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ADDED;
+import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ALREADY_EXISTS;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_NOT_EXISTS;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.WRONG_LOGIN_OR_PASSWORD;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.WRONG_STATUS;
@@ -49,39 +49,39 @@ public class UserService implements UserDetailsService {
         User user = new User(username, encodedPassword, UserRole.USER);
 
         return userRepository.findByUsername(username)
-                .map(appuser -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS, username)))
+                .map(appuser -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS.getDescription(), username)))
                 .switchIfEmpty(addUser(user));
     }
 
     private Mono<RegistrationResult> addUser(User user) {
         return userRepository.add(user)
-                .zipWith(walletRepository.createFor(user.getUsername()), (u, w) -> new RegistrationResult(true, USER_ADDED));
+                .zipWith(walletRepository.createFor(user.getUsername()), (u, w) -> new RegistrationResult(true, USER_ADDED.getDescription()));
     }
 
     public Mono<LoginResult> loginUser(String username, String password) {
         return userRepository.findByUsername(username)
                 .map(user -> passwordEncoder.matches(password, user.getPassword())
-                        ? new LoginResult(true, String.format(LOGIN_SUCCESSFULLY, username))
-                        : new LoginResult(false, WRONG_LOGIN_OR_PASSWORD))
-                .switchIfEmpty(Mono.just(new LoginResult(false, String.format(USER_NOT_EXISTS, username))));
+                        ? new LoginResult(true, String.format(LOGIN_SUCCESSFULLY.getDescription(), username))
+                        : new LoginResult(false, WRONG_LOGIN_OR_PASSWORD.getDescription()))
+                .switchIfEmpty(Mono.just(new LoginResult(false, String.format(USER_NOT_EXISTS.getDescription(), username))));
     }
 
     public Mono<UpdateResult> updateState(String username, UserState userState) {
         return userRepository.findByUsername(username)
                 .flatMap(appuser -> updateState(appuser, userState))
-                .switchIfEmpty(Mono.just(new UpdateResult(false, USER_ADDED)));
+                .switchIfEmpty(Mono.just(new UpdateResult(false, USER_ADDED.getDescription())));
     }
 
     private Mono<UpdateResult> updateState(User user, UserState userState) {
         if (userState == null) {
-            return Mono.just(new UpdateResult(false, WRONG_STATUS));
+            return Mono.just(new UpdateResult(false, WRONG_STATUS.getDescription()));
         }
         if (UserState.TERMINATED == user.getUserState()) {
-            return Mono.just(new UpdateResult(false, CANNOT_CHANGE_STATUS_FROM_TERMINATED));
+            return Mono.just(new UpdateResult(false, CANNOT_CHANGE_STATUS_FROM_TERMINATED.getDescription()));
         }
         return userRepository.setUserState(user, userState)
-                .map(usr -> new UpdateResult(true, STATUS_CHANGED))
-                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS, user.getUsername()))));
+                .map(usr -> new UpdateResult(true, STATUS_CHANGED.getDescription()))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), user.getUsername()))));
     }
 
 }

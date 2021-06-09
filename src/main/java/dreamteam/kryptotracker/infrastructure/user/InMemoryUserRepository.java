@@ -29,7 +29,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Mono<Set<String>> getAllUsernames() {
-        return Mono.justOrEmpty(Optional.of(users.keySet()));
+        return Mono.just(users.keySet());
     }
 
     @Override
