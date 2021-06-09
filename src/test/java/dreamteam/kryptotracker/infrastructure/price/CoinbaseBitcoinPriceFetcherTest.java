@@ -1,4 +1,4 @@
-package dreamteam.kryptotracker.infrastructure;
+package dreamteam.kryptotracker.infrastructure.price;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dreamteam.kryptotracker.infrastructure.price.CoinbaseBitcoinPriceFetcher;

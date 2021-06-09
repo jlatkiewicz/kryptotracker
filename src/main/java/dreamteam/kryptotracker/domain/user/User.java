@@ -10,7 +10,7 @@ public class User implements UserDetails {
     private final String username;
     private final String password;
     private final UserRole userRole;
-    private UserState userState;
+    private final UserState userState;
 
     public User(String username,
                 String password,
@@ -19,6 +19,16 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
         this.userState = UserState.ACTIVE;
+    }
+
+    public User(String username,
+                String password,
+                UserRole userRole,
+                UserState userState) {
+        this.username = username;
+        this.password = password;
+        this.userRole = userRole;
+        this.userState = userState;
     }
 
     @Override
@@ -65,7 +75,7 @@ public class User implements UserDetails {
         return userState;
     }
 
-    public void setUserState(UserState userState) {
-        this.userState = userState;
+    public User withUserState(UserState state) {
+        return new User(username, password, userRole, state);
     }
 }
