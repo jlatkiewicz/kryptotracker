@@ -79,6 +79,10 @@ public class User implements UserDetails {
         return new User(username, password, userRole, state);
     }
 
+    public User withPassword(String password) {
+        return new User(username, password, userRole, userState);
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }

@@ -28,7 +28,7 @@ class KryptotrackerApplicationTests {
     void flowTest() {
 	    //user is created
         String username = "newUser";
-        userService.signUpUser(username, "password").block();
+        userService.registerUser(username, "password").block();
 
         //user should exist
         assertNotNull(userService.findBy(username).block());
