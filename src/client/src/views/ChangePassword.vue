@@ -1,0 +1,90 @@
+<template>
+  <div>
+    <b-container class="bv-example-row">
+      <b-row class="justify-content-md-center mt-5">
+        <b-col cols="5">
+          <b-card header="Change password" class="text-center">
+            <b-form @submit="onChange" @reset="onReset" v-if="show">
+              <b-form-group
+                  id="input-group-1"
+                  label="New password:"
+                  label-for="input-1"
+              >
+                <b-form-input
+                    id="input-1"
+                    v-model="form.password1"
+                    type="password"
+                    required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group
+                  id="input-group-2"
+                  label="Repeat password:"
+                  label-for="input-2"
+              >
+                <b-form-input
+                    id="input-2"
+                    v-model="form.password2"
+                    type="password"
+                    required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-button type="submit" variant="primary" class="mr-2"
+              >Change
+              </b-button>
+              <b-button type="reset" variant="danger">Reset</b-button>
+            </b-form>
+          </b-card>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      form: {
+        password1: "",
+        password2: "",
+      },
+      show: true,
+    };
+  },
+  methods: {
+    onReset() {
+      this.form.password1 = "";
+      this.form.password2 = "";
+    },
+    onChange(event) {
+      if (this.form.password1 !== this.form.password2){
+        alert("Password do not match")
+        this.onReset()
+      }
+    else{
+      const vm = this;
+      event.preventDefault();
+      axios
+          .post("http://localhost:8080/users/register/", this.form)
+          .then(function (response) {
+            console.log(response);
+            vm.reset();
+            alert("Register successfully");
+            vm.$router.push("/login");
+          })
+          .catch(function (err) {
+            console.log(err);
+            alert("Something goes wrong.");
+            vm.reset();
+          });
+    }
+    },
+}};
+</script>
+
+<style scoped></style>

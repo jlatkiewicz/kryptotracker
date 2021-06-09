@@ -5,6 +5,8 @@ import SignUp from "@/views/SignUp";
 import Login from "@/views/Login";
 import Wallet from "@/views/Wallet";
 import Logout from "@/views/LogOut";
+import ChangePassword from "@/views/ChangePassword";
+import Admin from "@/views/Admin";
 //import store from "@/store/index";
 
 Vue.use(VueRouter);
@@ -46,6 +48,22 @@ const routes = [
     path: "/wallet",
     name: "Wallet",
     component: Wallet,
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/password",
+    name: "Change Password",
+    component: ChangePassword,
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
     meta: {
       requireAuth: true,
     },

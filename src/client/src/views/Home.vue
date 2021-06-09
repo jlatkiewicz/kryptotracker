@@ -1,22 +1,24 @@
 <template>
   <div>
-    <b-row class="justify-content-center">
-      <div>
-        <b-card
-          align-h="center"
-          border-variant="light"
-          bg-variant="light"
-          tag="article"
-          style="max-width: 70rem"
-          class="mb-2 mx-auto"
-        >
+    <b-container>
+      <b-row class="justify-content-center">
+      <b-col cols="6" variant="info">
           <b-img-lazy
-            style="max-width: 50rem"
-            thumbnail
-            fluid
-            src="../assets/pexels-krypto-home.jpg"
-            alt="Image 1"
+              thumbnail
+              fluid
+              src="../assets/pexels-krypto-home.jpg"
+              alt="Image 1"
           ></b-img-lazy>
+      </b-col>
+      <b-col b-col cols="6" variant="info" >
+        <b-card
+            align-h="center"
+            border-variant="light"
+            bg-variant="light"
+            tag="article"
+            style="max-width: 70rem"
+            class="mb-2 mx-auto"
+        >
           <b-card-text>
             <h2 v-if="isUserLogin() === true" class="my-2">
               Hello again, {{ username }}!
@@ -25,14 +27,16 @@
           </b-card-text>
 
           <b-button v-if="isUserLogin() === true" to="/wallet" variant="primary"
-            >Let's check your wallet</b-button
+          >Let's check your wallet</b-button
           >
           <b-button v-else to="/signup" variant="primary"
-            >Let's register!</b-button
+          >Let's register!</b-button
           >
         </b-card>
-      </div>
+      </b-col>
+
     </b-row>
+    </b-container>
   </div>
 </template>
 

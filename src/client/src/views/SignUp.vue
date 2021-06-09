@@ -3,7 +3,7 @@
     <b-container class="bv-example-row">
       <b-row class="justify-content-md-center mt-5">
         <b-col cols="5">
-          <b-card>
+          <b-card header="Register" class="text-center">
             <b-form @submit="onRegister" @reset="onReset" v-if="show">
               <b-form-group
                 id="input-group-1"
@@ -38,13 +38,6 @@
               </b-button>
               <b-button type="reset" variant="danger">Reset</b-button>
             </b-form>
-          </b-card>
-        </b-col>
-      </b-row>
-      <b-row class="justify-content-md-center mt-5">
-        <b-col cols="5">
-          <b-card class="mt-3" header="Form Data Result">
-            <pre class="m-0">{{ form }}</pre>
           </b-card>
         </b-col>
       </b-row>

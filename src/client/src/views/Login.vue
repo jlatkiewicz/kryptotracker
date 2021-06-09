@@ -3,7 +3,7 @@
     <b-container class="bv-example-row">
       <b-row class="justify-content-md-center mt-5">
         <b-col cols="5">
-          <b-card>
+          <b-card  header="Login in" class="text-center">
             <b-form @submit="onLogin" @reset="onReset">
               <b-form-group
                 id="input-group-1"
@@ -38,9 +38,6 @@
               </b-button>
               <b-button type="reset" variant="danger">Cancel</b-button>
             </b-form>
-          </b-card>
-          <b-card class="mt-3" header="Form Data Result">
-            <pre class="m-0">{{ form }}</pre>
           </b-card>
         </b-col>
       </b-row>
@@ -111,7 +108,16 @@ export default {
         .post("/users/login", this.form)
         .then(function (response) {
           console.log(response);
-        //  vm.$store.state.isUserLogin = true; //do poprawy - commit
+          /**
+           * Na poczatku trzeba bedzie sprawdzic czy loguje sie Admin
+           * isAdmin -> jesli true to jedno
+           *         -> jesli false, to to co pod spodem
+           * jesli Admin
+           *    - nie ma wyliczania portfela
+           *    - przechodzimy do panelu Admina
+           *    - zmienia sie Navbar
+           */
+
           console.log(vm.$store.state.isUserLogin);
           vm.$store.commit('userLogin');
           console.log(vm.$store.state.isUserLogin);

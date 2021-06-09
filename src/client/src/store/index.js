@@ -9,6 +9,7 @@ export default new Vuex.Store({
     user: {
       id: 0,
       name: "",
+      status: "Active",
       isAdmin: false,
     },
     wallet: {
@@ -57,3 +58,18 @@ export default new Vuex.Store({
   },
   modules: {},
 });
+
+
+
+// function printMoney(string) {
+//   const strArr = string.split('.', 2)
+//   const firstPart = strArr[0]
+//   const secondPart = strArr[1]
+//   return firstPart.concat(secondPart);
+// }
+//
+// const bitcoinInPLN = printMoney(response.data.bitcoinPriceInPln * vm.tmp.bitcoin)
+// await vm.$store.dispatch(
+//     "changeMoney",
+//     bitcoinInPLN
+// );
