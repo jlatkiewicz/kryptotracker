@@ -1,11 +1,11 @@
 package dreamteam.kryptotracker.domain.user;
 
-public class LoginResult {
+public class UpdateResult {
 
     private final boolean successful;
     private final String description;
 
-    public LoginResult(boolean successful, String description) {
+    public UpdateResult(boolean successful, String description) {
         this.successful = successful;
         this.description = description;
     }

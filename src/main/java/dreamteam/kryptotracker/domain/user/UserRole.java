@@ -1,6 +1,6 @@
 package dreamteam.kryptotracker.domain.user;
 
-public enum AppUserRole {
+public enum UserRole {
 
     USER,
     ADMIN
