@@ -1,11 +1,13 @@
 package dreamteam.kryptotracker.api.users;
 
+import dreamteam.kryptotracker.domain.user.User;
 import dreamteam.kryptotracker.domain.user.UserService;
 import dreamteam.kryptotracker.domain.user.UserState;
 import dreamteam.kryptotracker.domain.wallet.WalletService;
 import java.util.Set;
 import javax.security.auth.login.LoginException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,11 +80,20 @@ public class UserController {
 
     @PutMapping("/users/{username}/password")
     public Mono<String> updatePassword(@PathVariable("username") String username, @RequestParam("password") String password) {
-        return userService.updatePassword(username, password)
-                .flatMap(result -> {
-                    if (result.isSuccessful()) return Mono.just(result.getDescription());
-                    else return Mono.error(new IllegalArgumentException(result.getDescription()));
-                });
+        User currentlyLoginUser = getCurrentlyLoginUser();
+        if (currentlyLoginUser.getUsername().equals(username)) {
+            return userService.updatePassword(username, password)
+                    .flatMap(result -> {
+                        if (result.isSuccessful()) return Mono.just(result.getDescription());
+                        else return Mono.error(new IllegalArgumentException(result.getDescription()));
+                    });
+        } else
+            return Mono.error(new LoginException(
+                    String.format("'%s' cannot change password of user '%s'", currentlyLoginUser.getUsername(), username)));
+    }
+
+    private User getCurrentlyLoginUser() {
+        return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
 }
