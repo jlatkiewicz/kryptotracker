@@ -3,6 +3,7 @@ package dreamteam.kryptotracker.infrastructure.wallet;
 import dreamteam.kryptotracker.domain.wallet.Wallet;
 import dreamteam.kryptotracker.domain.wallet.WalletRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -10,10 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Component
+@Repository
 public class InMemoryWalletRepository implements WalletRepository {
     private final Map<String, Wallet> wallets = new HashMap<>();
-
 
     @Override
     public Mono<Wallet> findBy(String userId) {

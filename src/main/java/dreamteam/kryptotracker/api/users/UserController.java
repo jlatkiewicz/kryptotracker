@@ -4,7 +4,6 @@ import dreamteam.kryptotracker.domain.user.User;
 import dreamteam.kryptotracker.domain.user.UserService;
 import dreamteam.kryptotracker.domain.user.UserState;
 import dreamteam.kryptotracker.domain.wallet.WalletService;
-import java.util.Set;
 import javax.security.auth.login.LoginException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public Mono<Set<String>> getAllUsernames() {
+    public Flux<String> getAllUsernames() {
         return userService.getAllUsernames();
     }
 

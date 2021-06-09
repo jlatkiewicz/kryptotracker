@@ -1,12 +1,12 @@
 package dreamteam.kryptotracker.domain.user;
 
 import dreamteam.kryptotracker.domain.wallet.WalletRepository;
-import java.util.Set;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static dreamteam.kryptotracker.domain.user.ResultDescription.CANNOT_CHANGE_STATUS_FROM_TERMINATED;
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public Mono<Set<String>> getAllUsernames() {
+    public Flux<String> getAllUsernames() {
         return userRepository.getAllUsernames();
     }
 
@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
         User user = new User(username, encodedPassword, UserRole.USER);
 
         return userRepository.findByUsername(username)
-                .map(appuser -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS.getDescription(), username)))
+                .map(usr -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS.getDescription(), username)))
                 .switchIfEmpty(addUser(user));
     }
 
@@ -83,8 +83,8 @@ public class UserService implements UserDetailsService {
 
     public Mono<UpdateResult> updateState(String username, UserState userState) {
         return userRepository.findByUsername(username)
-                .flatMap(appuser -> updateState(appuser, userState))
-                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), username))));
+                .flatMap(user -> updateState(user, userState))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, USER_ADDED.getDescription())));
     }
 
     private Mono<UpdateResult> updateState(User user, UserState userState) {
