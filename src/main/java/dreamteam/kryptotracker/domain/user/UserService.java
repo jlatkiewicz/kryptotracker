@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import static dreamteam.kryptotracker.domain.user.ResultDescription.CANNOT_CHANGE_STATUS_FROM_TERMINATED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.LOGIN_SUCCESSFULLY;
+import static dreamteam.kryptotracker.domain.user.ResultDescription.PASSWORD_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.STATUS_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ADDED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ALREADY_EXISTS;
@@ -83,7 +84,7 @@ public class UserService implements UserDetailsService {
     public Mono<UpdateResult> updateState(String username, UserState userState) {
         return userRepository.findByUsername(username)
                 .flatMap(appuser -> updateState(appuser, userState))
-                .switchIfEmpty(Mono.just(new UpdateResult(false, USER_ADDED.getDescription())));
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), username))));
     }
 
     private Mono<UpdateResult> updateState(User user, UserState userState) {
@@ -98,4 +99,15 @@ public class UserService implements UserDetailsService {
                 .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), user.getUsername()))));
     }
 
+    public Mono<UpdateResult> updatePassword(String username, String password) {
+        return userRepository.findByUsername(username)
+                .flatMap(usr -> updatePassword(usr, password))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), username))));
+    }
+
+    private Mono<UpdateResult> updatePassword(User user, String password) {
+        return userRepository.setPassword(user, passwordEncoder.encode(password))
+                .map(usr -> new UpdateResult(true, PASSWORD_CHANGED.getDescription()))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), user.getUsername()))));
+    }
 }

@@ -4,6 +4,7 @@ public enum ResultDescription {
 
     CANNOT_CHANGE_STATUS_FROM_TERMINATED("Cannot change status from TERMINATED"),
     LOGIN_SUCCESSFULLY("User '%s' login successfully"),
+    PASSWORD_CHANGED("Password changed"),
     STATUS_CHANGED("Status changed"),
     USER_ADDED("User added"),
     USER_ALREADY_EXISTS("User '%s' already exists"),
@@ -11,7 +12,7 @@ public enum ResultDescription {
     WRONG_LOGIN_OR_PASSWORD("Wrong login or password"),
     WRONG_STATUS("Wrong status");
 
-    private String description;
+    private final String description;
 
     ResultDescription(String description) {
         this.description = description;

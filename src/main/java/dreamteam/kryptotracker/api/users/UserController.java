@@ -76,4 +76,13 @@ public class UserController {
                 });
     }
 
+    @PutMapping("/users/{username}/password")
+    public Mono<String> updatePassword(@PathVariable("username") String username, @RequestParam("password") String password) {
+        return userService.updatePassword(username, password)
+                .flatMap(result -> {
+                    if (result.isSuccessful()) return Mono.just(result.getDescription());
+                    else return Mono.error(new IllegalArgumentException(result.getDescription()));
+                });
+    }
+
 }

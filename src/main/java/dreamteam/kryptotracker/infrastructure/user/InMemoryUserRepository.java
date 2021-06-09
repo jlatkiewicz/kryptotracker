@@ -39,4 +39,10 @@ public class InMemoryUserRepository implements UserRepository {
         return findByUsername(user.getUsername());
     }
 
+    @Override
+    public Mono<User> setPassword(User user, String password) {
+        Optional.ofNullable(users.get(user.getUsername()))
+                .ifPresent(usr -> usr.setPassword(password));
+        return findByUsername(user.getUsername());
+    }
 }

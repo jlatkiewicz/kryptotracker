@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
     private final String username;
-    private final String password;
+    private String password;
     private final UserRole userRole;
     private UserState userState;
 
@@ -67,5 +67,9 @@ public class User implements UserDetails {
 
     public void setUserState(UserState userState) {
         this.userState = userState;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

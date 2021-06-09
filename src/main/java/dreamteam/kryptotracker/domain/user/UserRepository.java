@@ -11,4 +11,5 @@ public interface UserRepository {
     Mono<User> add(User user);
     Mono<User> findByUsername(String username);
     Mono<User> setUserState(User user, UserState userState);
+    Mono<User> setPassword(User user, String password);
 }
