@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
         return userRepository.getAllUsernames();
     }
 
-    public Mono<RegistrationResult> signUpUser(String username, String password) {
+    public Mono<RegistrationResult> registerUser(String username, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         User user = new User(username, encodedPassword, UserRole.USER);
 
@@ -53,9 +53,23 @@ public class UserService implements UserDetailsService {
                 .switchIfEmpty(addUser(user));
     }
 
+    public Mono<RegistrationResult> registerAdmin(String username, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(username, encodedPassword, UserRole.ADMIN);
+
+        return userRepository.findByUsername(username)
+                .map(appuser -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS.getDescription(), username)))
+                .switchIfEmpty(addAdmin(user));
+    }
+
     private Mono<RegistrationResult> addUser(User user) {
         return userRepository.add(user)
                 .zipWith(walletRepository.createFor(user.getUsername()), (u, w) -> new RegistrationResult(true, USER_ADDED.getDescription()));
+    }
+
+    private Mono<RegistrationResult> addAdmin(User user) {
+        return userRepository.add(user)
+                .map(usr -> new RegistrationResult(true, USER_ADDED.getDescription()));
     }
 
     public Mono<LoginResult> loginUser(String username, String password) {
