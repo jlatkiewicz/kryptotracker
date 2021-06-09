@@ -20,13 +20,13 @@ public class WalletService {
     public Mono<Wallet> addBitcoin(String userId, BigDecimal amount) {
         return walletRepository.findBy(userId)
                 .map(wallet -> wallet.add(amount))
-                .doOnNext(wallet -> walletRepository.overwrite(userId, wallet));
+                .flatMap(wallet -> walletRepository.overwrite(userId, wallet));
     }
 
     public Mono<Wallet> subtractBitcoin(String userId, BigDecimal amount) {
         return walletRepository.findBy(userId)
                 .map(wallet -> wallet.subtract(amount))
-                .doOnNext(wallet -> walletRepository.overwrite(userId, wallet));
+                .flatMap(wallet -> walletRepository.overwrite(userId, wallet));
     }
 
     public Mono<Wallet> setBitcoin(String userId, BigDecimal amount) {

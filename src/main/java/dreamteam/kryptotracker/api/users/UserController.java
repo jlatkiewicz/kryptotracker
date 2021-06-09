@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Mono<Set<String>> getAllUsernames() {
+    public Flux<String> getAllUsernames() {
         return userService.getAllUsernames();
     }
 
