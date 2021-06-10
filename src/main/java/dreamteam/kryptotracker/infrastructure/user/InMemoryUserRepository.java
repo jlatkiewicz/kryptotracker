@@ -29,8 +29,8 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public Flux<String> getAllUsernames() {
-        return Flux.fromIterable(users.keySet());
+    public Flux<User> getAllUsers() {
+        return Flux.fromIterable(users.values());
     }
 
     @Override

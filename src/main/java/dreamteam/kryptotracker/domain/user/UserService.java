@@ -41,8 +41,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public Flux<String> getAllUsernames() {
-        return userRepository.getAllUsernames();
+    public Flux<User> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 
     public Mono<RegistrationResult> registerUser(String username, String password) {
