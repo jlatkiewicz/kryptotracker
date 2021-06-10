@@ -3,7 +3,6 @@ package dreamteam.kryptotracker.domain.user;
 public enum ResultDescription {
 
     CANNOT_CHANGE_STATUS_FROM_TERMINATED("Cannot change status from TERMINATED"),
-    LOGIN_SUCCESSFULLY("User '%s' login successfully"),
     PASSWORD_CHANGED("Password changed"),
     STATUS_CHANGED("Status changed"),
     USER_ADDED("User added"),
