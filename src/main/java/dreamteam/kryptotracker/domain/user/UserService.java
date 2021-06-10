@@ -1,7 +1,6 @@
 package dreamteam.kryptotracker.domain.user;
 
 import dreamteam.kryptotracker.domain.wallet.WalletRepository;
-import java.util.Set;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import static dreamteam.kryptotracker.domain.user.ResultDescription.CANNOT_CHANGE_STATUS_FROM_TERMINATED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.LOGIN_SUCCESSFULLY;
+import static dreamteam.kryptotracker.domain.user.ResultDescription.PASSWORD_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.STATUS_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ADDED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ALREADY_EXISTS;
@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
         return userRepository.getAllUsernames();
     }
 
-    public Mono<RegistrationResult> signUpUser(String username, String password) {
+    public Mono<RegistrationResult> registerUser(String username, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         User user = new User(username, encodedPassword, UserRole.USER);
 
@@ -54,9 +54,23 @@ public class UserService implements UserDetailsService {
                 .switchIfEmpty(addUser(user));
     }
 
+    public Mono<RegistrationResult> registerAdmin(String username, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(username, encodedPassword, UserRole.ADMIN);
+
+        return userRepository.findByUsername(username)
+                .map(appuser -> new RegistrationResult(false, String.format(USER_ALREADY_EXISTS.getDescription(), username)))
+                .switchIfEmpty(addAdmin(user));
+    }
+
     private Mono<RegistrationResult> addUser(User user) {
         return userRepository.add(user)
                 .zipWith(walletRepository.createFor(user.getUsername()), (u, w) -> new RegistrationResult(true, USER_ADDED.getDescription()));
+    }
+
+    private Mono<RegistrationResult> addAdmin(User user) {
+        return userRepository.add(user)
+                .map(usr -> new RegistrationResult(true, USER_ADDED.getDescription()));
     }
 
     public Mono<LoginResult> loginUser(String username, String password) {
@@ -85,4 +99,15 @@ public class UserService implements UserDetailsService {
                 .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), user.getUsername()))));
     }
 
+    public Mono<UpdateResult> updatePassword(String username, String password) {
+        return userRepository.findByUsername(username)
+                .flatMap(usr -> updatePassword(usr, password))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), username))));
+    }
+
+    private Mono<UpdateResult> updatePassword(User user, String password) {
+        return userRepository.setPassword(user, passwordEncoder.encode(password))
+                .map(usr -> new UpdateResult(true, PASSWORD_CHANGED.getDescription()))
+                .switchIfEmpty(Mono.just(new UpdateResult(false, String.format(USER_NOT_EXISTS.getDescription(), user.getUsername()))));
+    }
 }

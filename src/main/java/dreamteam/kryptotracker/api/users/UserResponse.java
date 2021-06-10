@@ -3,6 +3,7 @@ package dreamteam.kryptotracker.api.users;
 import dreamteam.kryptotracker.api.wallet.WalletResponse;
 import dreamteam.kryptotracker.domain.user.User;
 import dreamteam.kryptotracker.domain.wallet.Wallet;
+import java.util.Optional;
 
 public class UserResponse {
     private final String username;
@@ -22,7 +23,9 @@ public class UserResponse {
                 user.getUsername(),
                 user.getUserRole().name(),
                 user.getUserState().name(),
-                WalletResponse.from(wallet, user.getUsername())
+                Optional.ofNullable(wallet)
+                        .map(w -> WalletResponse.from(w, user.getUsername()))
+                        .orElse(null)
         );
     }
 

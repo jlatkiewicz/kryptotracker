@@ -33,7 +33,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userRole.name());
         return Collections.singletonList(authority);
     }
 
@@ -54,7 +54,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return userState != UserState.ACTIVE;
+        return userState == UserState.ACTIVE;
     }
 
     @Override
@@ -77,5 +77,13 @@ public class User implements UserDetails {
 
     public User withUserState(UserState state) {
         return new User(username, password, userRole, state);
+    }
+
+    public User withPassword(String password) {
+        return new User(username, password, userRole, userState);
+    }
+
+    public boolean isAdmin() {
+        return userRole == UserRole.ADMIN;
     }
 }

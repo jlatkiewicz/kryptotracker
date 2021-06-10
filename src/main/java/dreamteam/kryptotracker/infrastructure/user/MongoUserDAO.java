@@ -30,6 +30,12 @@ public class MongoUserDAO implements UserRepository {
     }
 
     @Override
+    public Mono<User> setPassword(User user, String password) {
+        MongoUser userWithPassword = MongoUser.fromUser(user.withPassword(password));
+        return mongoUserRepository.save(userWithPassword).map(MongoUser::toUser);
+    }
+
+    @Override
     public Flux<String> getAllUsernames() {
         return mongoUserRepository.findAll()
                 .map(MongoUser::getUsername);
