@@ -81,7 +81,7 @@ public class UserController {
     @PutMapping("/users/{username}/password")
     public Mono<String> updatePassword(@PathVariable("username") String username, @RequestParam("password") String password) {
         User currentlyLoginUser = getCurrentlyLoginUser();
-        if (currentlyLoginUser.getUsername().equals(username)) {
+        if (currentlyLoginUser.getUsername().equals(username) || currentlyLoginUser.isAdmin()) {
             return userService.updatePassword(username, password)
                     .flatMap(result -> {
                         if (result.isSuccessful()) return Mono.just(result.getDescription());

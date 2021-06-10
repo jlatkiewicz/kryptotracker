@@ -24,9 +24,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Mono<User> setUserState(User user, UserState userState) {
-        Optional.ofNullable(users.get(user.getUsername()))
-                .map(usr -> usr.withUserState(userState))
-                .ifPresent(usr -> users.put(user.getUsername(), usr));
+       users.put(user.getUsername(), user.withUserState(userState));
         return findByUsername(user.getUsername());
     }
 
@@ -43,8 +41,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Mono<User> setPassword(User user, String password) {
-        Optional.ofNullable(users.get(user.getUsername()))
-                .ifPresent(usr -> usr.setPassword(password));
+        users.put(user.getUsername(), user.withPassword(password));
         return findByUsername(user.getUsername());
     }
 }

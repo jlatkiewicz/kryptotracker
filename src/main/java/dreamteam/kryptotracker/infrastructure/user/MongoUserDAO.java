@@ -31,8 +31,8 @@ public class MongoUserDAO implements UserRepository {
 
     @Override
     public Mono<User> setPassword(User user, String password) {
-        MongoUser userWithState = MongoUser.fromUser(user.withPassword(password));
-        return mongoUserRepository.save(userWithState).map(MongoUser::toUser);
+        MongoUser userWithPassword = MongoUser.fromUser(user.withPassword(password));
+        return mongoUserRepository.save(userWithPassword).map(MongoUser::toUser);
     }
 
     @Override

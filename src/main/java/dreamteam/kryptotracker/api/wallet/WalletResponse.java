@@ -1,7 +1,6 @@
 package dreamteam.kryptotracker.api.wallet;
 
 import dreamteam.kryptotracker.domain.wallet.Wallet;
-import java.util.Optional;
 
 public class WalletResponse {
     private final String userId;
@@ -13,9 +12,7 @@ public class WalletResponse {
     }
 
     public static WalletResponse from(Wallet wallet, String userId) {
-        return Optional.ofNullable(wallet)
-                .map(w -> new WalletResponse(userId, w.getBitcoinAmount().toString()))
-                .orElse(null);
+        return new WalletResponse(userId, wallet.getBitcoinAmount().toString());
     }
 
     public String getUserId() {

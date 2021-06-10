@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
     private final String username;
-    private String password;
+    private final String password;
     private final UserRole userRole;
     private final UserState userState;
 
@@ -81,10 +81,6 @@ public class User implements UserDetails {
 
     public User withPassword(String password) {
         return new User(username, password, userRole, userState);
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public boolean isAdmin() {
