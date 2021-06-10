@@ -9,13 +9,31 @@ export default new Vuex.Store({
     user: {
       id: 0,
       name: "",
-      status: "Active",
+      status: "ACTIVE",
       isAdmin: false,
     },
     wallet: {
       money: 0,
       bitcoin: 0,
     },
+    users: [
+      {
+        "username": "bea1234",
+        "state": "ACTIVE"
+      },
+      {
+        "username": "jacekp",
+        "state": "TERMINATED"
+      },
+      {
+        "username": "user23",
+        "state": "LOCKED"
+      },
+      {
+        "username": "annakowal",
+        "state": "ACTIVE"
+      },
+    ]
   },
   getters: {
     getUsername: (state) => {

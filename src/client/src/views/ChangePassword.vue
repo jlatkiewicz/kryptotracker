@@ -45,6 +45,7 @@
 
 <script>
 import axios from "axios";
+import {mapState} from "vuex";
 
 export default {
   data() {
@@ -56,6 +57,9 @@ export default {
       show: true,
     };
   },
+  computed: mapState({
+    username: state => state.user.name
+  }),
   methods: {
     onReset() {
       this.form.password1 = "";
@@ -63,19 +67,20 @@ export default {
     },
     onChange(event) {
       if (this.form.password1 !== this.form.password2){
-        alert("Password do not match")
+        alert("Passwords do not match")
         this.onReset()
       }
     else{
       const vm = this;
       event.preventDefault();
       axios
-          .post("http://localhost:8080/users/register/", this.form)
+          .post("http://localhost:8080/users/" + this.username + "/password?=", this.form.password1)
+          ///users/beata/password?password=newpassword
           .then(function (response) {
             console.log(response);
             vm.reset();
-            alert("Register successfully");
-            vm.$router.push("/login");
+            alert("Password was changed succesfully");
+            vm.$router.push("/wallet");
           })
           .catch(function (err) {
             console.log(err);
