@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface UserRepository {
 
-    Flux<String> getAllUsernames();
+    Flux<User> getAllUsers();
     Mono<User> add(User user);
     Mono<User> findByUsername(String username);
     Mono<User> setUserState(User user, UserState userState);

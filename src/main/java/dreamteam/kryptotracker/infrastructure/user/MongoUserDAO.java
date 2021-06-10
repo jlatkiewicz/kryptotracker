@@ -36,9 +36,9 @@ public class MongoUserDAO implements UserRepository {
     }
 
     @Override
-    public Flux<String> getAllUsernames() {
+    public Flux<User> getAllUsers() {
         return mongoUserRepository.findAll()
-                .map(MongoUser::getUsername);
+                .map(MongoUser::toUser);
     }
 
     @Override

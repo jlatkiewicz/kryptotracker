@@ -64,8 +64,10 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public Flux<String> getAllUsernames() {
-        return userService.getAllUsernames();
+    public Flux<UserWithStateResponse> getAllUsersUsernamesWithState() {
+        return userService.getAllUsers()
+                .filter(user -> !user.isAdmin())
+                .map(UserWithStateResponse::from);
     }
 
     @PutMapping("/users/{username}")
