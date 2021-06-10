@@ -10,13 +10,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static dreamteam.kryptotracker.domain.user.ResultDescription.CANNOT_CHANGE_STATUS_FROM_TERMINATED;
-import static dreamteam.kryptotracker.domain.user.ResultDescription.LOGIN_SUCCESSFULLY;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.PASSWORD_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.STATUS_CHANGED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ADDED;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_ALREADY_EXISTS;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.USER_NOT_EXISTS;
-import static dreamteam.kryptotracker.domain.user.ResultDescription.WRONG_LOGIN_OR_PASSWORD;
 import static dreamteam.kryptotracker.domain.user.ResultDescription.WRONG_STATUS;
 
 @Service
@@ -73,12 +71,9 @@ public class UserService implements UserDetailsService {
                 .map(usr -> new RegistrationResult(true, USER_ADDED.getDescription()));
     }
 
-    public Mono<LoginResult> loginUser(String username, String password) {
+    public Mono<User> loginUser(String username, String password) {
         return userRepository.findByUsername(username)
-                .map(user -> passwordEncoder.matches(password, user.getPassword())
-                        ? new LoginResult(true, String.format(LOGIN_SUCCESSFULLY.getDescription(), username))
-                        : new LoginResult(false, WRONG_LOGIN_OR_PASSWORD.getDescription()))
-                .switchIfEmpty(Mono.just(new LoginResult(false, String.format(USER_NOT_EXISTS.getDescription(), username))));
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
     }
 
     public Mono<UpdateResult> updateState(String username, UserState userState) {

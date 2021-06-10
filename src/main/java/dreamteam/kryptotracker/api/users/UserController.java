@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static dreamteam.kryptotracker.domain.user.ResultDescription.WRONG_LOGIN_OR_PASSWORD;
+
 @RestController
 public class UserController {
 
@@ -47,12 +49,10 @@ public class UserController {
     }
 
     @PostMapping("/users/login")
-    public Mono<String> login(@RequestBody LoginRequest request) {
+    public Mono<LoginResponse> login(@RequestBody LoginRequest request) {
         return userService.loginUser(request.getUsername(), request.getPassword())
-                .flatMap(result -> {
-                    if (result.isSuccessful()) return Mono.just(result.getDescription());
-                    else return Mono.error(new LoginException(result.getDescription()));
-                });
+                .map(LoginResponse::from)
+                .switchIfEmpty(Mono.error(new LoginException(WRONG_LOGIN_OR_PASSWORD.getDescription())));
     }
 
     @GetMapping("/users/{username}")
