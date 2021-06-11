@@ -7,17 +7,17 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" class="mr-auto" is-nav>
-          <b-navbar-nav
-            class="ml-auto"
-            v-if="isUserLogin === false"
-          >
+          <b-navbar-nav class="ml-auto" v-if="isUserLogin === false">
             <b-nav-item to="/login">Login</b-nav-item>
             <b-nav-item to="/signup">SignUp</b-nav-item>
           </b-navbar-nav>
-          <b-navbar-nav class="ml-auto" v-else>
+          <b-navbar-nav class="ml-auto" v-else-if="isAdmin===false">
             <b-nav-item to="/wallet">Wallet</b-nav-item>
             <b-nav-item to="/logout">Logout</b-nav-item>
-            <b-nav-item to="/admin">Admin(tmp)</b-nav-item>
+          </b-navbar-nav>
+          <b-navbar-nav class="ml-auto" v-if="isAdmin===true">
+            <b-nav-item to="/admin">Admin</b-nav-item>
+            <b-nav-item to="/logout">Logout</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
@@ -31,7 +31,8 @@ import {mapState} from "vuex";
 export default {
   name: "NavbarHeader",
   computed: mapState({
-    isUserLogin: state => state.isUserLogin
+    isUserLogin: state => state.isUserLogin,
+    isAdmin: state => state.user.isAdmin
   }),
 };
 </script>

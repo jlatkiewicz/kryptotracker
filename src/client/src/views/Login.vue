@@ -47,6 +47,7 @@
 
 <script>
 import axios from "axios";
+import {mapState} from "vuex";
 
 export default {
   data() {
@@ -57,11 +58,14 @@ export default {
       },
     };
   },
-  computed: {
-    getUser() {
-      return this.$store.state.user;
-    },
-  },
+  computed: mapState({
+    username: state => state.user.name,
+    status: state => state.user.state,
+    money: state => state.wallet.money,
+    bitcoin: state => state.wallet.bitcoin,
+    isUserLogin: state => state.isUserLogin,
+    auth: state => state.auth
+  }),
   methods: {
     reset() {
       this.form.username = "";
@@ -72,61 +76,48 @@ export default {
       await axios
         .get("/price")
         .then(function (response) {
-          vm.$store.commit(
-            "setBalance",
-            response.data.bitcoinPriceInPln * vm.$store.state.wallet.bitcoin
+          vm.$store.dispatch(
+            "changeMoney",
+            response.data.bitcoinPriceInPln * vm.bitcoin
           );
-          console.log(vm.$store.state.wallet.money);
+          console.log(vm.money);
           console.log(response);
         })
         .catch(function (err) {
           console.log(err.response);
-          alert("Something goes wrong.");
+          alert("Przeliczanie poszlo nie tak.");
         });
     },
-    setWallet() {
+    async setWallet() {
       const vm = this;
-      console.log("chce zmieniac portfel");
-      const username = vm.$store.state.user.name;
-      console.log(username)
-      axios
+      const username = vm.username;
+      await axios
         .get("/wallet/" + username)
         .then(async function (response) {
-          vm.$store.commit("setBalance", response.data.bitcoinAmount);
+          vm.$store.commit("setBitcoins", response.data.bitcoinAmount);
           await vm.calculate();
-          console.log(vm.$store.state.wallet.bitcoin);
+          console.log(vm.bitcoin);
           console.log(response);
         })
         .catch(function (err) {
           console.log(err.response);
         });
     },
-    onLogin(event) {
+    async onLogin(event) {
       const vm = this;
       event.preventDefault();
-      axios
+      await axios
         .post("/users/login", this.form)
         .then(function (response) {
-          console.log(response);
-          /**
-           * Na poczatku trzeba bedzie sprawdzic czy loguje sie Admin
-           * isAdmin -> jesli true to jedno
-           *         -> jesli false, to to co pod spodem
-           * jesli Admin
-           *    - nie ma wyliczania portfela
-           *    - przechodzimy do panelu Admina
-           *    - zmienia sie Navbar
-           */
-
-          console.log(vm.$store.state.isUserLogin);
           vm.$store.commit('userLogin');
-          console.log(vm.$store.state.isUserLogin);
           vm.$store.commit('setUsername', vm.form.username)
-          vm.reset();
-          alert("Login successfully");
-          vm.setWallet();
-          vm.calculate();
-          vm.$router.push("/wallet");
+          vm.$store.commit("setAuth", vm.form.password);
+          if(response.data.isAdmin === true){
+            vm.adminLogged();
+          }
+          else{
+            vm.userLogged();
+          }
         })
         .catch(function (err) {
           console.log(err);
@@ -138,6 +129,18 @@ export default {
       event.preventDefault();
       this.reset();
     },
+    adminLogged(){
+      this.$store.commit('adminLogged');
+      alert("Login successfully");
+      this.$router.push("/admin");
+    },
+    userLogged(){
+      this.$store.commit('userLogged');
+      this.setWallet();
+      this.calculate();
+      alert("Login successfully");
+      this.$router.push("/wallet");
+    }
   },
 };
 </script>

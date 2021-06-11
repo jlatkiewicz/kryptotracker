@@ -133,7 +133,7 @@ export default {
   computed: mapState({
     username: state => state.user.name,
     users: state => state.users,
-    status: state => state.user.status,
+    status: state => state.user.state,
   }),
   methods: {
      onLoad(event) {

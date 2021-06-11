@@ -17,7 +17,7 @@
                   <b-col cols="6" class="text-center my-1">Hello {{ username }}!</b-col>
                   <b-col cols="6">
                     <b-button size="sm" :pressed="false" disabled variant="outline-success"
-                              v-if="status === 'Active'">{{ status }}
+                              v-if="status === 'ACTIVE'">{{ status }}
                     </b-button>
                   </b-col>
                 </b-row>
@@ -95,28 +95,27 @@ export default {
   },
   computed: mapState({
     username: state => state.user.name,
-    status: state => state.user.status,
+    status: state => state.user.state,
     money: state => state.wallet.money,
     bitcoin: state => state.wallet.bitcoin
   }),
   methods: {
-    async cutString(string) {
-      const strArr = string.toString().split('.', 2)
-      const firstPart = strArr[0]
-      const secondPart = strArr[1].substr(0, 2)
-      return firstPart.concat('.', secondPart);
-    },
+    // async cutString(string) {
+    //   const strArr = string.toString().split('.', 2)
+    //   const firstPart = strArr[0]
+    //   const secondPart = strArr[1].substr(0, 2)
+    //   return firstPart.concat('.', secondPart);
+    // },
     async onCalculate() {
       // event.preventDefault(event);
       const vm = this;
       await axios
           .get("/price")
           .then(async function (response) {
-            const string = response.data.bitcoinPriceInPln * vm.tmp.bitcoin
-            const bitcoinInPLN = await vm.cutString(string)
+            const money = response.data.bitcoinPriceInPln * vm.tmp.bitcoin
             await vm.$store.dispatch(
                 "changeMoney",
-                bitcoinInPLN
+                money
             );
             console.log(vm.tmp.bitcoin);
             console.log(response);

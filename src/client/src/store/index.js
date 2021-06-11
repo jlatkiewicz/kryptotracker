@@ -9,7 +9,7 @@ export default new Vuex.Store({
     user: {
       id: 0,
       name: "",
-      status: "ACTIVE",
+      state: "",
       isAdmin: false,
     },
     wallet: {
@@ -33,7 +33,12 @@ export default new Vuex.Store({
         "username": "annakowal",
         "state": "ACTIVE"
       },
-    ]
+    ],
+    auth:
+        {
+        "username": "",
+        "password": ""
+      }
   },
   getters: {
     getUsername: (state) => {
@@ -53,8 +58,12 @@ export default new Vuex.Store({
     setBitcoins(state, value) {
       state.wallet.bitcoin = value;
     },
-    setMoney(state, value) {
-      state.wallet.money = value;
+    setMoney(state, string) {
+      const strArr = string.toString().split('.', 2)
+      const firstPart = strArr[0]
+      const secondPart = strArr[1].substr(0, 2)
+      const prettyMoney =  firstPart.concat('.', secondPart);
+      state.wallet.money = prettyMoney;
     },
     setUsername(state, name) {
       state.user.name = name;
@@ -64,14 +73,36 @@ export default new Vuex.Store({
     },
     userLogout(state){
       state.isUserLogin = false;
+    },
+    adminLogged(state){
+      state.user.isAdmin = true;
+    },
+    userLogged(state){
+      state.user.isAdmin = false;
+      state.user.state = "ACTIVE"
+    },
+    setAuth(state, password){
+      state.auth.username = state.user.name;
+      state.auth.password = password
+    },
+    setDefault(state){
+      state.isUserLogin = false
+      state.user.isAdmin = false
+      state.user.name = ""
+      state.user.state = ""
+      state.auth.username = ""
+      state.auth.password = ""
     }
   },
   actions: {
-    changeBitcoins(context, value){
-      context.commit('setBitcoins', value);
+    changeBitcoins(context, bitcoins){
+      context.commit('setBitcoins', bitcoins);
     },
-    changeMoney(context, value){
-      context.commit('setMoney', value);
+    changeMoney(context, string){
+      context.commit('setMoney', string);
+    },
+    logout(context){
+      context.commit("setDefault");
     }
   },
   modules: {},

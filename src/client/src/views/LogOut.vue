@@ -20,24 +20,23 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   data() {
     return {
       form: {
         username: "",
         password: "",
-      },
-      username: this.$store.state.user.name,
+      }
     };
   },
-  computed: {
-    getUser() {
-      return this.$store.state.user;
-    },
-  },
+  computed: mapState({
+    username: state => state.user.name,
+  }),
   methods: {
-    onClick() {
-      this.$store.state.isUserLogin = false;
+    async onClick() {
+      await this.$store.dispatch("logout")
     },
   },
 };
