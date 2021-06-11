@@ -23,7 +23,6 @@ public class CoinbaseBitcoinPriceFetcher implements BitcoinPriceFetcher {
         this.webClient = webClient;
     }
 
-
     @Override
     public Mono<BigDecimal> fetchBitcoinPrice() {
         return webClient.get()
