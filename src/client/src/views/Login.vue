@@ -75,8 +75,8 @@ export default {
       const vm = this;
       await axios
         .get("/price")
-        .then(function (response) {
-          vm.$store.dispatch(
+        .then(async function (response) {
+         await vm.$store.dispatch(
             "changeMoney",
             response.data.bitcoinPriceInPln * vm.bitcoin
           );
@@ -85,7 +85,7 @@ export default {
         })
         .catch(function (err) {
           console.log(err.response);
-          alert("Przeliczanie poszlo nie tak.");
+          //alert("Przeliczanie poszlo nie tak.");
         });
     },
     async setWallet() {
@@ -120,7 +120,7 @@ export default {
         })
         .catch(function (err) {
           console.log(err);
-          alert("Something goes wrong.");
+         // alert("Something goes wrong.");
           vm.reset();
         });
     },

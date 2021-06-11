@@ -152,35 +152,47 @@ export default {
     async onLoad(event) {
       event.preventDefault(event);
       this.selected = this.user.state;
-      //const vm = this;
+      const vm = this;
       await axios
           .get("/users/" + this.user.username)
           .then(function (response) {
-           // vm.$store.dispatch('changeBitcoins', response.data.bitcoinAmount);
-           // console.log(vm.tmp.bitcoin);
-           // vm.onCalculate(event);
+            const state = response.data.userState
+            vm.selected = state
             console.log(response);
+          })
+          .catch(function (err) {
+            console.log(err.response);
+           // alert("Something goes wrong.");
+          });
+    },
+    async onChange(event) {
+      event.preventDefault(event);
+      const vm = this;
+      const newValue = this.selected
+      await axios
+          .put("/users/" + this.user.username + "?state=" + newValue)
+          .then(async function (response) {
+            console.log(response)
+            await vm.$store.dispatch('setUserState',newValue);
+            await vm.loadUsers()
+
           })
           .catch(function (err) {
             console.log(err.response);
             alert("Something goes wrong.");
           });
     },
-    async onChange(event) {
-      event.preventDefault(event);
-      // const vm = this;
-      // await axios
-      //     .post("/wallet/set/" + this.$store.getters.getUsername + "/" + this.tmp.bitcoin)
-      //     .then(function (response) {
-      //       vm.$store.dispatch('changeBitcoins', response.data.bitcoinAmount);
-      //       console.log(vm.tmp.bitcoin);
-      //       vm.onCalculate(event);
-      //       console.log(response);
-      //     })
-      //     .catch(function (err) {
-      //       console.log(err.response);
-      //       alert("Something goes wrong.");
-      //     });
+    async loadUsers() {
+      const vm = this;
+      await axios
+          .get("/users")
+          .then(async function (response) {
+            await vm.$store.dispatch("loadUsers", response.data);
+            console.log(response.data);
+          })
+          .catch(function (err) {
+            console.log(err.response);
+          });
     },
   },
 };

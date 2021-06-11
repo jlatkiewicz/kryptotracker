@@ -115,6 +115,9 @@ export default new Vuex.Store({
     setUserState(context, state) {
       context.commit("setState", state);
     },
+    userLogged(context){
+      context.commit("userLogged");
+    }
   },
   modules: {},
 });

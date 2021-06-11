@@ -25,7 +25,7 @@
               </h2>
               <h2 v-else>Hey you!</h2>
 
-                <div v-if="isNormalUserLogin() === true">
+                <div v-if="isUserLogin === true && isAdmin === false">
                   <b-button to="/wallet" variant="primary" class="my-2">
                     Let's check your wallet
                   </b-button>
@@ -33,19 +33,20 @@
 
                 <div v-else-if="isAdmin === true">
                   <b-button to="/admin" variant="primary" class="my-2">
-                    Go to your panel!
+                    Go to your panel
                   </b-button>
                 </div>
 
                 <div v-else>
                   <div>
-                    <b-button to="/signup" variant="primary" class="my-2">
-                      I am new here!
+                    <b-button to="/login" variant="primary" class="my-2">
+                      Let's login!
                     </b-button>
+
                   </div>
                   <div>
-                    <b-button to="/login" variant="primary" class="my-2">
-                      Wanna login again
+                    <b-button to="/signup" variant="primary" class="my-2">
+                      I am new here.
                     </b-button>
                   </div>
                 </div>
@@ -63,11 +64,6 @@ import {mapState} from "vuex";
 
 export default {
   name: "Home",
-  data() {
-    return {
-      username: this.$store.state.user.name,
-    };
-  },
   computed: mapState({
     username: (state) => state.user.name,
     isUserLogin: (state) => state.isUserLogin,
