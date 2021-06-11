@@ -3,7 +3,7 @@
     <b-container class="bv-example-row">
       <b-row class="justify-content-md-center mt-5">
         <b-col cols="5">
-          <b-card  header="Login in" class="text-center">
+          <b-card header="Login in" class="text-center">
             <b-form @submit="onLogin" @reset="onReset">
               <b-form-group
                 id="input-group-1"
@@ -47,7 +47,7 @@
 
 <script>
 import axios from "axios";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -59,12 +59,12 @@ export default {
     };
   },
   computed: mapState({
-    username: state => state.user.name,
-    status: state => state.user.state,
-    money: state => state.wallet.money,
-    bitcoin: state => state.wallet.bitcoin,
-    isUserLogin: state => state.isUserLogin,
-    auth: state => state.auth
+    username: (state) => state.user.name,
+    status: (state) => state.user.state,
+    money: (state) => state.wallet.money,
+    bitcoin: (state) => state.wallet.bitcoin,
+    isUserLogin: (state) => state.isUserLogin,
+    auth: (state) => state.auth,
   }),
   methods: {
     reset() {
@@ -109,13 +109,12 @@ export default {
       await axios
         .post("/users/login", this.form)
         .then(function (response) {
-          vm.$store.commit('userLogin');
-          vm.$store.commit('setUsername', vm.form.username)
+          vm.$store.commit("userLogin");
+          vm.$store.commit("setUsername", vm.form.username);
           vm.$store.commit("setAuth", vm.form.password);
-          if(response.data.isAdmin === true){
+          if (response.data.isAdmin === true) {
             vm.adminLogged();
-          }
-          else{
+          } else {
             vm.userLogged();
           }
         })
@@ -129,18 +128,31 @@ export default {
       event.preventDefault();
       this.reset();
     },
-    adminLogged(){
-      this.$store.commit('adminLogged');
+    adminLogged() {
+      this.$store.commit("adminLogged");
       alert("Login successfully");
+      this.loadUsers();
       this.$router.push("/admin");
     },
-    userLogged(){
-      this.$store.commit('userLogged');
+    userLogged() {
+      this.$store.dispatch("userLogged");
       this.setWallet();
       this.calculate();
       alert("Login successfully");
       this.$router.push("/wallet");
-    }
+    },
+    async loadUsers() {
+      const vm = this;
+      await axios
+        .get("/users")
+        .then(async function (response) {
+          await vm.$store.dispatch("loadUsers", response.data);
+          console.log(response.data);
+        })
+        .catch(function (err) {
+          console.log(err.response);
+        });
+    },
   },
 };
 </script>

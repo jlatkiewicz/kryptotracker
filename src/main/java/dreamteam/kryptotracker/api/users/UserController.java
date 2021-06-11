@@ -4,13 +4,7 @@ import dreamteam.kryptotracker.domain.user.UserService;
 import dreamteam.kryptotracker.domain.user.UserState;
 import dreamteam.kryptotracker.domain.wallet.WalletService;
 import javax.security.auth.login.LoginException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -27,6 +21,7 @@ public class UserController {
         this.walletService = walletService;
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @PostMapping("/users/register")
     public Mono<String> register(@RequestBody RegistrationRequest request) {
         return userService.registerUser(request.getUsername(), request.getPassword())
@@ -36,6 +31,7 @@ public class UserController {
                 });
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @PostMapping("/users/registerAdmin")
     public Mono<String> registerAdmin(@RequestBody RegistrationRequest request) {
         return userService.registerAdmin(request.getUsername(), request.getPassword())
@@ -45,6 +41,7 @@ public class UserController {
                 });
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @PostMapping("/users/login")
     public Mono<LoginResponse> login(@RequestBody LoginRequest request) {
         return userService.loginUser(request.getUsername(), request.getPassword())
@@ -52,6 +49,7 @@ public class UserController {
                 .switchIfEmpty(Mono.error(new LoginException(WRONG_LOGIN_OR_PASSWORD.getDescription())));
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @GetMapping("/users/{username}")
     public Mono<UserResponse> get(@PathVariable("username") String username) {
         return userService.findBy(username)
@@ -59,6 +57,7 @@ public class UserController {
                 .switchIfEmpty(Mono.error(new LoginException(username)));
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @GetMapping("/users")
     public Flux<UserWithStateResponse> getAllUsersUsernamesWithState() {
         return userService.getAllUsers()
@@ -66,6 +65,7 @@ public class UserController {
                 .map(UserWithStateResponse::from);
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @PutMapping("/users/{username}")
     public Mono<String> update(@PathVariable("username") String username, @RequestParam("state") String state) {
         return userService.updateState(username, UserState.from(state))
@@ -75,6 +75,7 @@ public class UserController {
                 });
     }
 
+    @CrossOrigin(origins = "http://localhost:8088")
     @PutMapping("/users/{username}/password")
     public Mono<String> updatePassword(@PathVariable("username") String username, @RequestParam("password") String password) {
         return userService.updatePassword(username, password)

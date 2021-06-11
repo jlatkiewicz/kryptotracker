@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -28,15 +28,15 @@ export default {
       form: {
         username: "",
         password: "",
-      }
+      },
     };
   },
   computed: mapState({
-    username: state => state.user.name,
+    username: (state) => state.user.name,
   }),
   methods: {
     async onClick() {
-      await this.$store.dispatch("logout")
+      await this.$store.dispatch("logout");
     },
   },
 };

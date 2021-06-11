@@ -4,7 +4,7 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 import VueAxios from "vue-axios";
-import Vuex, {mapState} from "vuex";
+import Vuex, { mapState } from "vuex";
 import "./icons.js";
 import "./plugins/bootstrap-vue";
 
@@ -22,8 +22,8 @@ new Vue({
     homeImg: "./assets/pexels-krypto-home.jpg",
   },
   computed: mapState({
-    username: state => state.user.name,
-    bitcoin: state => state.wallet.bitcoin,
-    money: state => state.wallet.money
-  })
+    username: (state) => state.user.name,
+    bitcoin: (state) => state.wallet.bitcoin,
+    money: (state) => state.wallet.money,
+  }),
 }).$mount("#app");

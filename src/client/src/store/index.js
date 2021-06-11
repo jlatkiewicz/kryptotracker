@@ -18,27 +18,26 @@ export default new Vuex.Store({
     },
     users: [
       {
-        "username": "bea1234",
-        "state": "ACTIVE"
+        username: "bea1234",
+        state: "ACTIVE",
       },
       {
-        "username": "jacekp",
-        "state": "TERMINATED"
+        username: "jacekp",
+        state: "TERMINATED",
       },
       {
-        "username": "user23",
-        "state": "LOCKED"
+        username: "user23",
+        state: "LOCKED",
       },
       {
-        "username": "annakowal",
-        "state": "ACTIVE"
+        username: "annakowal",
+        state: "ACTIVE",
       },
     ],
-    auth:
-        {
-        "username": "",
-        "password": ""
-      }
+    auth: {
+      username: "",
+      password: "",
+    },
   },
   getters: {
     getUsername: (state) => {
@@ -59,56 +58,66 @@ export default new Vuex.Store({
       state.wallet.bitcoin = value;
     },
     setMoney(state, string) {
-      const strArr = string.toString().split('.', 2)
-      const firstPart = strArr[0]
-      const secondPart = strArr[1].substr(0, 2)
-      const prettyMoney =  firstPart.concat('.', secondPart);
+      const strArr = string.toString().split(".", 2);
+      const firstPart = strArr[0];
+      const secondPart = strArr[1].substr(0, 2);
+      const prettyMoney = firstPart.concat(".", secondPart);
       state.wallet.money = prettyMoney;
     },
     setUsername(state, name) {
       state.user.name = name;
     },
-    userLogin(state){
+    setState(state, userState) {
+      state.user.state = userState;
+    },
+    userLogin(state) {
       state.isUserLogin = true;
     },
-    userLogout(state){
+    userLogout(state) {
       state.isUserLogin = false;
     },
-    adminLogged(state){
+    adminLogged(state) {
       state.user.isAdmin = true;
     },
-    userLogged(state){
+    userLogged(state) {
       state.user.isAdmin = false;
-      state.user.state = "ACTIVE"
+      state.user.state = "ACTIVE";
     },
-    setAuth(state, password){
+    setAuth(state, password) {
       state.auth.username = state.user.name;
-      state.auth.password = password
+      state.auth.password = password;
     },
-    setDefault(state){
-      state.isUserLogin = false
-      state.user.isAdmin = false
-      state.user.name = ""
-      state.user.state = ""
-      state.auth.username = ""
-      state.auth.password = ""
-    }
+    setDefault(state) {
+      state.isUserLogin = false;
+      state.user.isAdmin = false;
+      state.user.name = "";
+      state.user.state = "";
+      state.auth.username = "";
+      state.auth.password = "";
+    },
+    loadUsersData(state, users) {
+      state.users = users;
+    },
   },
   actions: {
-    changeBitcoins(context, bitcoins){
-      context.commit('setBitcoins', bitcoins);
+    changeBitcoins(context, bitcoins) {
+      context.commit("setBitcoins", bitcoins);
     },
-    changeMoney(context, string){
-      context.commit('setMoney', string);
+    changeMoney(context, string) {
+      context.commit("setMoney", string);
     },
-    logout(context){
+    logout(context) {
       context.commit("setDefault");
-    }
+    },
+    loadUsers(context, users) {
+      context.commit("loadUsersData", users);
+    },
+    setUserState(context, state) {
+      context.commit("setState", state);
+    },
   },
   modules: {},
 });
-
-
 
 // function printMoney(string) {
 //   const strArr = string.split('.', 2)

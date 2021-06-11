@@ -11,11 +11,11 @@
             <b-nav-item to="/login">Login</b-nav-item>
             <b-nav-item to="/signup">SignUp</b-nav-item>
           </b-navbar-nav>
-          <b-navbar-nav class="ml-auto" v-else-if="isAdmin===false">
+          <b-navbar-nav class="ml-auto" v-else-if="isAdmin === false">
             <b-nav-item to="/wallet">Wallet</b-nav-item>
             <b-nav-item to="/logout">Logout</b-nav-item>
           </b-navbar-nav>
-          <b-navbar-nav class="ml-auto" v-if="isAdmin===true">
+          <b-navbar-nav class="ml-auto" v-if="isAdmin === true">
             <b-nav-item to="/admin">Admin</b-nav-item>
             <b-nav-item to="/logout">Logout</b-nav-item>
           </b-navbar-nav>
@@ -26,13 +26,13 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "NavbarHeader",
   computed: mapState({
-    isUserLogin: state => state.isUserLogin,
-    isAdmin: state => state.user.isAdmin
+    isUserLogin: (state) => state.isUserLogin,
+    isAdmin: (state) => state.user.isAdmin,
   }),
 };
 </script>

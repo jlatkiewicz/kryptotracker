@@ -75,9 +75,9 @@ export default {
           vm.$router.push("/login");
         })
         .catch(function (err) {
-            console.log(err);
-            alert("Something goes wrong.");
-            vm.reset();
+          console.log(err);
+          alert("Something goes wrong.");
+          vm.reset();
         });
     },
     onReset(event) {
